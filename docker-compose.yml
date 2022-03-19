@@ -1,0 +1,22 @@
+version: "3.0"
+
+services:
+  web:
+    build: ./server
+    restart: always
+    tty: true
+    volumes:
+      - ./server/app:/app
+    ports:
+      - 8000:8000
+
+  db:
+    image: postgres:13.2
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/postgresql/data
