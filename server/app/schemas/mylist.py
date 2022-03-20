@@ -16,6 +16,6 @@ class MyListContent(BaseModel):
 
 class MyListGet(BaseModel):
     id: str
-    d_anime_store_mylist_url: str
+    d_anime_store_url: str
     name: str
     mylist: List[MyListContent]
