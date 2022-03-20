@@ -1,11 +1,13 @@
-set client_encoding = 'UTF8';
+SET client_encoding = 'UTF8';
+SET TIME ZONE 'Asia/Tokyo';
 
 CREATE TABLE mylists (
   id varchar primary key, 
-  name varchar
+  name varchar,
+  createdAt timestamp with time zone
 );
 
-CREATE TABLE mylist_contents (
+CREATE TABLE mylistContents (
   id varchar, 
   title varchar,
   image varchar,
