@@ -1,13 +1,9 @@
-
-SET client_encoding = 'UTF8';
-
-CREATE TABLE mylists (
-  id varchar primary key, 
-  name varchar,
-  createdAt timestamp with time zone
+CREATE TABLE d_anime.mylists (
+  id varchar not null primary key, 
+  name varchar
 );
 
-CREATE TABLE mylistContents (
+CREATE TABLE d_anime.mylistContents (
   id varchar, 
   title varchar,
   image varchar,

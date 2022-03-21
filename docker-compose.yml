@@ -11,28 +11,28 @@ services:
       - 8000:8000
 
   db:
-    image: postgres:13.2
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: sample
-      TZ: "Asia/Tokyo"
-    hostname: postgres
+    build: ./db
     volumes:
+      - ./db/save_data:/var/lib/mysql
       - ./db/initdb:/docker-entrypoint-initdb.d
-      - ./db/data:/var/lib/postgresql/data
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=d_anime
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_ROOT_HOST=%
 
-  pgadmin:
-    image: dpage/pgadmin4:5.0
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
     restart: always
     ports:
-      - 81:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      - "3031:80"
     volumes:
-      - ./pgadmin:/var/lib/pgadmin
+      - ./phpmyadmin/sessions:/sessions
     depends_on:
       - db
