@@ -2,13 +2,16 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from models.db.db import SessionLocal
 import schemas.mylist as mylist_schema
+from schemas.mylist import MyListContent
 from service.scrape import Scrape
 from cruds.mylist import (
     create_mylist,
     get_mylist_by_id,
     get_mylist_all,
     get_mylist_contents_by_id,
+    create_mylist_contents,
 )
+from typing import List
 
 router = APIRouter()
 
@@ -23,16 +26,18 @@ def get_db():
 
 @router.get("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_get(id: str = None, db: Session = Depends(get_db)):
-    mylist = Scrape().mylist(id)
+    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    for mylist in mylist_list:
+        create_mylist_contents(db=db, mylist_content=mylist, id=id)
 
-    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db, id)
+    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
 
     return mylist_schema.MyListGet(
         id=id,
         d_anime_store_url=f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}",
         name=mylist_info.name,
         created_at=mylist_info.created_at,
-        mylist=mylist,
+        mylist=mylist_list,
     )
 
 

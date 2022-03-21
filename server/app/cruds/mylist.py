@@ -31,3 +31,21 @@ def create_mylist(db: Session, mylist: mylist_schema.MyListPost):
         return db_mylist
     except exc.IntegrityError:
         raise HTTPException(status_code=402, detail="this 'id' is already exists.")
+
+
+def create_mylist_contents(
+    db: Session, mylist_content: mylist_schema.MyListContent, id: str
+):
+    db_mylist_content = mylist_model.MylistContents(
+        id=id,
+        title=mylist_content["title"],
+        image=mylist_content["image"],
+        url=mylist_content["url"],
+    )
+    try:
+        db.add(db_mylist_content)
+        db.commit()
+        db.refresh(db_mylist_content)
+        return db_mylist_content
+    except exc.IntegrityError:
+        raise HTTPException(status_code=402, detail="mylist is already exists")
