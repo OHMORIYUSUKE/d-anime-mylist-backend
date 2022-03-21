@@ -40,7 +40,6 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
     return mylist_schema.MyListGet(
         id=id,
         d_anime_store_url=f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}",
-        name=mylist_info.name,
         created_at=mylist_info.created_at,
         mylist=mylist_list,
     )
@@ -53,4 +52,4 @@ async def mylist_post(my_list: mylist_schema.MyListPost, db: Session = Depends(g
     mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(my_list.id)
     for mylist in mylist_list:
         create_mylist_contents(db=db, mylist_content=mylist, id=my_list.id)
-    return mylist_schema.MyListPost(name=my_list.name, id=my_list.id)
+    return mylist_schema.MyListPost(id=my_list.id)

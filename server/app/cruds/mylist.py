@@ -32,7 +32,7 @@ def get_mylist_all(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_mylist(db: Session, mylist: mylist_schema.MyListPost):
-    db_mylist = mylist_model.Mylists(id=mylist.id, name=mylist.name)
+    db_mylist = mylist_model.Mylists(id=mylist.id)
     try:
         db.add(db_mylist)
         db.commit()

@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from bs4 import ResultSet
 
+from fastapi import FastAPI, HTTPException
+
 from typing import List
 import schemas.mylist as mylist_schema
 
@@ -45,4 +47,6 @@ class Scrape:
                 }
             )
 
+        if mylist_list == []:
+            raise HTTPException(status_code=402, detail="mylist page not exist.")
         return mylist_list

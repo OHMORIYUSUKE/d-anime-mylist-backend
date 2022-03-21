@@ -6,7 +6,6 @@ from models.db.db import Base, ENGINE
 class Mylists(Base):
     __tablename__ = 'mylist'
     id = Column(String(255), primary_key=True)
-    name = Column(String(255))
     created_at = Column('created_at', TIMESTAMP, server_default=current_timestamp())
 
 class MylistContents(Base):
