@@ -1,12 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP
+from sqlalchemy.sql.functions import current_timestamp
 from sqlalchemy.orm import relationship
-from db.db import Base
-from db.db import ENGINE
+from models.db.db import Base, ENGINE
 
 class Mylists(Base):
     __tablename__ = 'mylist'
     id = Column(String(255), primary_key=True)
     name = Column(String(255))
+    created_at = Column('created_at', TIMESTAMP, server_default=current_timestamp())
 
 class MylistContents(Base):
     __tablename__ = 'mylistContents'
