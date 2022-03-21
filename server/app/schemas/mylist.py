@@ -1,4 +1,4 @@
-from turtle import title
+from datetime import datetime, time, timedelta
 from pydantic import BaseModel
 from typing import List
 
@@ -18,4 +18,5 @@ class MyListGet(BaseModel):
     id: str
     d_anime_store_url: str
     name: str
+    created_at: datetime
     mylist: List[MyListContent]
