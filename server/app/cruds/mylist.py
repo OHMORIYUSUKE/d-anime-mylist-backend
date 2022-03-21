@@ -7,14 +7,23 @@ import schemas.mylist as mylist_schema
 
 
 def get_mylist_by_id(db: Session, id: str):
-    return db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
+    result = (
+        db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
+    )
+    if result == None:
+        raise HTTPException(
+            status_code=402, detail="unknown mylist. you must register."
+        )
+    return result
 
 
-def get_mylist_contents_by_id(db: Session, id: str):
+def get_mylist_contents_by_id(db: Session, id: str, skip: int = 0, limit: int = 100):
     return (
         db.query(mylist_model.MylistContents)
         .filter(mylist_model.MylistContents.id == id)
-        .first()
+        .offset(skip)
+        .limit(limit)
+        .all()
     )
 
 

@@ -11,6 +11,7 @@ from cruds.mylist import (
     get_mylist_contents_by_id,
     create_mylist_contents,
 )
+import models.mylist as mylist_model
 from typing import List
 
 router = APIRouter()
@@ -26,11 +27,15 @@ def get_db():
 
 @router.get("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_get(id: str = None, db: Session = Depends(get_db)):
-    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
-    for mylist in mylist_list:
-        create_mylist_contents(db=db, mylist_content=mylist, id=id)
-
     mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
+    mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(
+        db, id
+    )
+    mylist_list: List[mylist_schema.MyListContent] = []
+    for mylist in mylist_list_in_id:
+        mylist_list.append(
+            {"title": mylist.title, "image": mylist.image, "url": mylist.url}
+        )
 
     return mylist_schema.MyListGet(
         id=id,
@@ -44,4 +49,8 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
 @router.post("/my-list", response_model=mylist_schema.MyListPost)
 async def mylist_post(my_list: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     res = create_mylist(db, my_list)
+    # スクレイピング
+    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(my_list.id)
+    for mylist in mylist_list:
+        create_mylist_contents(db=db, mylist_content=mylist, id=my_list.id)
     return mylist_schema.MyListPost(name=my_list.name, id=my_list.id)
