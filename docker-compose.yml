@@ -14,10 +14,10 @@ services:
     build: ./db
     volumes:
       - ./db/save_data:/var/lib/mysql
-      - ./db/initdb:/docker-entrypoint-initdb.d
+      # - ./db/initdb:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=d_anime
+      - MYSQL_DATABASE=danime
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
       - MYSQL_ROOT_HOST=%
@@ -32,7 +32,5 @@ services:
     restart: always
     ports:
       - "3031:80"
-    volumes:
-      - ./phpmyadmin/sessions:/sessions
     depends_on:
       - db
