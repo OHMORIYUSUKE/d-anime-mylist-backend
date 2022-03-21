@@ -15,12 +15,3 @@ class MylistContents(Base):
     title = Column(String(255),primary_key=True)
     image = Column(String(255))
     url = Column(String(255))
-
-
-def main():
-    Base.metadata.drop_all(bind=ENGINE)
-    Base.metadata.create_all(bind=ENGINE)
-
-
-if __name__ == "__main__":
-    main()

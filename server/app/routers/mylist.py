@@ -15,6 +15,7 @@ def get_db():
     finally:
         db.close()
 
+
 @router.get("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_get(id: str = None):
     result = Scrape().mylist(id)
