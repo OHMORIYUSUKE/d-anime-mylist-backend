@@ -18,6 +18,9 @@ WORKDIR /app
 COPY /app .
 RUN pip install -r requirements.txt
 
+# __pycache__
+ENV PYTHONDONTWRITEBYTECODE 1
+
 EXPOSE 8000
 # FastAPIを8000ポートで待機
 CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
