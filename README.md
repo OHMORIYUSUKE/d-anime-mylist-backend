@@ -5,7 +5,7 @@
 black でフォーマットする!!
 
 ```
-$ docker exec -it d-anime-mylist_web_1 bash
+$ docker exec -it d-anime-mylist-web-1 bash
 コンテナ内 # pip install black
 コンテナ内 # black .
 All done! ✨ 🍰 ✨

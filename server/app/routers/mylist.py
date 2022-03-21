@@ -41,6 +41,7 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
         id=id,
         d_anime_store_url=f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}",
         created_at=mylist_info.created_at,
+        updated_at=mylist_info.updated_at,
         mylist=mylist_list,
     )
 
