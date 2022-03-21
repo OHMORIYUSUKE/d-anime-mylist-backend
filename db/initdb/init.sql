@@ -1,5 +1,5 @@
+
 SET client_encoding = 'UTF8';
-SET TIME ZONE 'Asia/Tokyo';
 
 CREATE TABLE mylists (
   id varchar primary key, 
