@@ -11,6 +11,7 @@ from cruds.mylist import (
     get_mylist_all,
     get_mylist_contents_by_id,
     create_mylist_contents,
+    update_mylist,
 )
 import models.mylist as mylist_model
 from typing import List
@@ -26,6 +27,21 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@router.put("/my-list", response_model=mylist_schema.MyListInfo)
+async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
+    id = get_id_in_url(mylist.url)
+    update_mylist_res = update_mylist(db=db, mylist=mylist)
+    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    for mylist_content in mylist_list:
+        create_mylist_contents_res = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
+    return mylist_schema.MyListInfo(
+        id=id,
+        d_anime_store_url=mylist.url,
+        created_at=update_mylist_res.created_at,
+        updated_at=update_mylist_res.updated_at,
+    )
 
 
 @router.get("/my-list/all", response_model=List[mylist_schema.MyListInfo])

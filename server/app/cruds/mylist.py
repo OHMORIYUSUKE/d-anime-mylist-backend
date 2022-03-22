@@ -2,9 +2,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from fastapi import FastAPI, HTTPException
 from typing import List
+from datetime import datetime
 
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
+from models.mylist import Mylists
 from service.get_id_in_url import get_id_in_url
 
 
@@ -58,4 +60,19 @@ def create_mylist_contents(
         db.refresh(db_mylist_content)
         return db_mylist_content
     except exc.IntegrityError:
-        raise HTTPException(status_code=402, detail="mylist is already exists")
+        # コンテンツは更新時に衝突するのでpass
+        # mylistが登録済みかどうかは、create_mylist関数で行う
+        pass
+
+
+def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schema.MyListGet:
+    id = get_id_in_url(mylist.url)
+    # select(不正にupdateさせない)(updateしたカラムを返す)
+    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
+    if result == None:
+        raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
+    # update
+    db_mylist = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id)
+    db_mylist.update({mylist_model.Mylists.id: id, mylist_model.Mylists.updated_at: datetime.now()})
+    db.commit()
+    return result
