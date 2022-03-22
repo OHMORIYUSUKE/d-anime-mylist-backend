@@ -8,7 +8,7 @@ DB_PW = "test"
 DB_HOST = "db"
 DB_NAME = "danime"
 
-DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
+DATABASE = "mysql://%s:%s@%s/%s?charset=utf8" % (
     DB_USER_NAME,
     DB_PW,
     DB_HOST,
@@ -16,20 +16,12 @@ DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
 )
 
 # DBとの接続
-ENGINE = create_engine(
-    DATABASE,
-    encoding="utf-8",
-    echo=True
-)
+ENGINE = create_engine(DATABASE, encoding="utf-8", echo=True)
 
 # Sessionの作成
 session = scoped_session(
     # ORM実行時の設定。自動コミットするか、自動反映するか
-    sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=ENGINE
-    )
+    sessionmaker(autocommit=False, autoflush=False, bind=ENGINE)
 )
 
 # modelで使用する

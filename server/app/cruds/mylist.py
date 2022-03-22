@@ -4,16 +4,13 @@ from fastapi import FastAPI, HTTPException
 
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
+from service.get_id_in_url import get_id_in_url
 
 
 def get_mylist_by_id(db: Session, id: str):
-    result = (
-        db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
-    )
+    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
     if result == None:
-        raise HTTPException(
-            status_code=402, detail="unknown mylist. you must register."
-        )
+        raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
     return result
 
 
@@ -32,19 +29,18 @@ def get_mylist_all(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_mylist(db: Session, mylist: mylist_schema.MyListPost):
-    db_mylist = mylist_model.Mylists(id=mylist.id)
+    id = get_id_in_url(mylist.url)
+    db_mylist = mylist_model.Mylists(id=id)
     try:
         db.add(db_mylist)
         db.commit()
         db.refresh(db_mylist)
         return db_mylist
     except exc.IntegrityError:
-        raise HTTPException(status_code=402, detail="this 'id' is already exists.")
+        raise HTTPException(status_code=402, detail="this mylist is already exists.")
 
 
-def create_mylist_contents(
-    db: Session, mylist_content: mylist_schema.MyListContent, id: str
-):
+def create_mylist_contents(db: Session, mylist_content: mylist_schema.MyListContent, id: str):
     db_mylist_content = mylist_model.MylistContents(
         id=id,
         title=mylist_content["title"],

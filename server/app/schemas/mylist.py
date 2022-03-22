@@ -4,7 +4,7 @@ from typing import List
 
 
 class MyListPost(BaseModel):
-    id: str
+    url: str
 
 
 class MyListContent(BaseModel):

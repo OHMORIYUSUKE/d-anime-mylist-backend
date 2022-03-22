@@ -1,2 +1,21 @@
 [tool.black]
-exclude = '(\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|_build|buck-out|build|dist|.*\/models\.py.*|.*\/models\/.*)'
+line-length = 120
+include = '\.py$'
+skip-string-normalization = false
+exclude = '''
+(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | venv
+    | \.idea
+    | \.vscode
+    | _build
+    | buck-out
+    | build
+    | dist
+    | migrations
+)
+'''

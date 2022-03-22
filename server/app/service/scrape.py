@@ -26,9 +26,7 @@ class Scrape:
         return soup
 
     def mylist(self, id: str) -> List[mylist_schema.MyListContent]:
-        soup = self.__get_html(
-            f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}"
-        )
+        soup = self.__get_html(f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}")
         # print(soup.prettify())
 
         title_elm_list: List[ResultSet] = soup.find_all("span", class_="ui-clamp")
@@ -36,9 +34,7 @@ class Scrape:
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
 
         mylist_list: List[mylist_schema.MyListContent] = []
-        for (title_elm, link_elm, image_elm) in zip(
-            title_elm_list, link_elm_list, image_elm_list
-        ):
+        for (title_elm, link_elm, image_elm) in zip(title_elm_list, link_elm_list, image_elm_list):
             mylist_list.append(
                 {
                     "title": title_elm.text,
