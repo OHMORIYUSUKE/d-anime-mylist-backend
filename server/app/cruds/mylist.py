@@ -27,7 +27,7 @@ def get_mylist_contents_by_id(
     )
 
 
-def get_mylist_all(db: Session, skip: int = 0, limit: int = 100) -> List[mylist_schema.MyListPost]:
+def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylists]:
     return db.query(mylist_model.Mylists).offset(skip).limit(limit).all()
 
 

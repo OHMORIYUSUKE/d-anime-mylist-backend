@@ -15,6 +15,7 @@ from cruds.mylist import (
 import models.mylist as mylist_model
 from typing import List
 from utils.make_mylistContent_list import make_mylistContent_list
+from utils.const_values import D_ANIME_MYPAGE_BASE_URL
 
 router = APIRouter()
 
@@ -27,6 +28,22 @@ def get_db():
         db.close()
 
 
+@router.get("/my-list/all", response_model=List[mylist_schema.MyListInfo])
+async def mylist_get_all(db: Session = Depends(get_db)):
+    all_mylist_info_list: List[mylist_model.Mylists] = get_mylist_all(db=db)
+    list_data: List[mylist_schema.MyListInfo] = []
+    for data in all_mylist_info_list:
+        list_data.append(
+            mylist_schema.MyListInfo(
+                id=data.id,
+                d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={data.id}",
+                created_at=data.created_at,
+                updated_at=data.updated_at,
+            )
+        )
+    return list_data
+
+
 @router.get("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_get(id: str = None, db: Session = Depends(get_db)):
     mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
@@ -34,7 +51,7 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
     mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
     return mylist_schema.MyListGet(
         id=id,
-        d_anime_store_url=f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}",
+        d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
         mylist=mylist_list,
@@ -55,7 +72,7 @@ async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(ge
     mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
     return mylist_schema.MyListGet(
         id=id,
-        d_anime_store_url=f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}",
+        d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
         mylist=mylist_list,
