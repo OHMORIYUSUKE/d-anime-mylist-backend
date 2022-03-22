@@ -14,7 +14,6 @@ services:
     build: ./db
     volumes:
       - ./db/save_data:/var/lib/mysql
-      # - ./db/initdb:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=danime
