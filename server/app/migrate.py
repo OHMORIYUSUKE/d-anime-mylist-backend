@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 
 from models.mylist import Base
-from models.db.db import DATABASE
+from db import DATABASE
 
 engine = create_engine(DATABASE, echo=True)
 

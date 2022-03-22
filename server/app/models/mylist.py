@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
 from sqlalchemy.sql.functions import current_timestamp
 from sqlalchemy.orm import relationship
-from models.db.db import Base, ENGINE
+from db import Base, ENGINE
 
 
 class Mylists(Base):

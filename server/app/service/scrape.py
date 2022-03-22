@@ -36,11 +36,9 @@ class Scrape:
         mylist_list: List[mylist_schema.MyListContent] = []
         for (title_elm, link_elm, image_elm) in zip(title_elm_list, link_elm_list, image_elm_list):
             mylist_list.append(
-                {
-                    "title": title_elm.text,
-                    "image": image_elm.get("data-src"),
-                    "url": link_elm.get("href"),
-                }
+                mylist_schema.MyListContent(
+                    title=title_elm.text, image=image_elm.get("data-src"), url=link_elm.get("href")
+                )
             )
 
         if mylist_list == []:
