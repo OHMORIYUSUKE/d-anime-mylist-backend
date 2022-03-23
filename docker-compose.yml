@@ -7,6 +7,8 @@ services:
     tty: true
     volumes:
       - ./server/app:/app
+    environment:
+      TZ: Asia/Tokyo
     ports:
       - 8000:8000
 
@@ -31,6 +33,6 @@ services:
       - PMA_PASSWORD=root
     restart: always
     ports:
-      - "3031:80"
+      - 3031:80
     depends_on:
       - db
