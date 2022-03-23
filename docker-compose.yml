@@ -10,7 +10,7 @@ services:
     environment:
       TZ: "${TZ}"
       DB_USER_NAME: "${DB_USER_NAME}"
-      DB_PW: "${DB_PW}"
+      DB_PW: "${DB_USER_PW}"
       DB_HOST: "${DB_HOST}"
       DB_NAME: "${DB_NAME}"
     ports:
