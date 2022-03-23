@@ -23,6 +23,6 @@ class MyListGet(BaseModel):
 
 class MyListInfo(BaseModel):
     id: str = Field(..., description="マイリストのID")
-    d_anime_store_url: str = Field(..., description="dアニメストアのマイページのURL")
+    d_anime_store_url: str = Field(..., description="dアニメストアのマイリストのURL")
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
