@@ -8,7 +8,11 @@ services:
     volumes:
       - ./server/app:/app
     environment:
-      TZ: Asia/Tokyo
+      TZ: "${TZ}"
+      DB_USER_NAME: "${DB_USER_NAME}"
+      DB_PW: "${DB_PW}"
+      DB_HOST: "${DB_HOST}"
+      DB_NAME: "${DB_NAME}"
     ports:
       - 8000:8000
 
@@ -17,20 +21,20 @@ services:
     volumes:
       - ./db/save_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=danime
-      - MYSQL_USER=test
-      - MYSQL_PASSWORD=test
-      - MYSQL_ROOT_HOST=%
-      - TZ=Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PW}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER_NAME}"
+      MYSQL_PASSWORD: "${DB_PW}"
+      MYSQL_ROOT_HOST: "%"
+      TZ: "${TZ}"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=db
-      - PMA_USER=root
-      - PMA_PASSWORD=root
+      PMA_ARBITRARY: 1
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: "${DB_ROOT_PW}"
     restart: always
     ports:
       - 3031:80
