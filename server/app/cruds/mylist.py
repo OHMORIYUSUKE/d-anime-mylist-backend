@@ -62,7 +62,6 @@ def create_mylist_contents(
         except exc.IntegrityError:
             raise HTTPException(status_code=402, detail="this mylist is already exists.")
     return mylist_content_list
-    
 
 
 def update_mylist_contents(

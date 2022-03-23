@@ -9,10 +9,10 @@ import os
 # DB_PW = "test"
 # DB_HOST = "db"
 # DB_NAME = "danime"
-DB_USER_NAME = os.environ.get('DB_USER_NAME')
-DB_PW = os.environ.get('DB_PW')
-DB_HOST = os.environ.get('DB_HOST')
-DB_NAME = os.environ.get('DB_NAME')
+DB_USER_NAME = os.environ.get("DB_USER_NAME")
+DB_PW = os.environ.get("DB_PW")
+DB_HOST = os.environ.get("DB_HOST")
+DB_NAME = os.environ.get("DB_NAME")
 
 DATABASE = "mysql://%s:%s@%s/%s?charset=utf8" % (
     DB_USER_NAME,
