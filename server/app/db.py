@@ -5,10 +5,6 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 import os
 
 # 接続したいDBの基本情報を設定
-# DB_USER_NAME = "test"
-# DB_PW = "test"
-# DB_HOST = "db"
-# DB_NAME = "danime"
 DB_USER_NAME = os.environ.get("DB_USER_NAME")
 DB_PW = os.environ.get("DB_PW")
 DB_HOST = os.environ.get("DB_HOST")
