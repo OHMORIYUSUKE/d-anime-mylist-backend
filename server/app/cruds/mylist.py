@@ -65,7 +65,7 @@ def create_mylist_contents(
 
 def update_mylist_contents(
     db: Session, mylist: mylist_schema.MyListPost, mylist_content_list: List[mylist_schema.MyListContent]
-) -> mylist_model.MylistContents:
+) -> List[mylist_model.MylistContents]:
     id = get_id_in_url(mylist.url)
     # deleat
     dlete_data = db.query(mylist_model.MylistContents).filter(mylist_model.MylistContents.id == id).all()
@@ -73,10 +73,13 @@ def update_mylist_contents(
         db.delete(dlete_data)
         db.commit()
     # create
-    # raise HTTPException(status_code=402, detail="aaaaaaaaaaaaaaaaaaaaa.")
+    mylist_contents_list: List[mylist_model.MylistContents] = []
     for mylist_content in mylist_content_list:
+        mylist_contents_list.append(
+            mylist_schema.MyListContent(title=mylist_content.title, image=mylist_content.image, url=mylist_content.url)
+        )
         result = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
-    return result
+    return mylist_contents_list
 
 
 def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schema.MyListGet:

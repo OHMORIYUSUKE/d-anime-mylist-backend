@@ -37,14 +37,12 @@ async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(ge
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
     mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
     update_mylist_contents_res = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
-    mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(db=db, id=id)
-    mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
     return mylist_schema.MyListGet(
         id=id,
         d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
-        mylist=mylist_list,
+        mylist=update_mylist_contents_res,
     )
 
 
