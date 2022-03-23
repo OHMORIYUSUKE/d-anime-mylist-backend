@@ -7,7 +7,7 @@
 .env を.env.sample をコピーしてルートディレクトリに作成してください。
 
 ```
-$ cp .env .env.sample
+$ cp .env.sample .env
 ```
 
 ### ポートの説明
