@@ -60,9 +60,23 @@ def create_mylist_contents(
         db.refresh(db_mylist_content)
         return db_mylist_content
     except exc.IntegrityError:
-        # コンテンツは更新時に衝突するのでpass
-        # mylistが登録済みかどうかは、create_mylist関数で行う
-        pass
+        raise HTTPException(status_code=402, detail="this mylist is already exists.")
+
+
+def update_mylist_contents(
+    db: Session, mylist: mylist_schema.MyListPost, mylist_content_list: List[mylist_schema.MyListContent]
+) -> mylist_model.MylistContents:
+    id = get_id_in_url(mylist.url)
+    # deleat
+    dlete_data = db.query(mylist_model.MylistContents).filter(mylist_model.MylistContents.id == id).all()
+    for dlete_data in dlete_data:
+        db.delete(dlete_data)
+        db.commit()
+    # create
+    # raise HTTPException(status_code=402, detail="aaaaaaaaaaaaaaaaaaaaa.")
+    for mylist_content in mylist_content_list:
+        result = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
+    return result
 
 
 def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schema.MyListGet:

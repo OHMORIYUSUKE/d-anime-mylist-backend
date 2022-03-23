@@ -12,6 +12,7 @@ from cruds.mylist import (
     get_mylist_contents_by_id,
     create_mylist_contents,
     update_mylist,
+    update_mylist_contents,
 )
 import models.mylist as mylist_model
 from typing import List
@@ -29,18 +30,21 @@ def get_db():
         db.close()
 
 
-@router.put("/my-list", response_model=mylist_schema.MyListInfo)
+@router.put("/my-list", response_model=mylist_schema.MyListGet)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(mylist.url)
     update_mylist_res = update_mylist(db=db, mylist=mylist)
-    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
-    for mylist_content in mylist_list:
-        create_mylist_contents_res = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
-    return mylist_schema.MyListInfo(
+    mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
+    update_mylist_contents_res = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
+    mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(db=db, id=id)
+    mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
+    return mylist_schema.MyListGet(
         id=id,
-        d_anime_store_url=mylist.url,
-        created_at=update_mylist_res.created_at,
-        updated_at=update_mylist_res.updated_at,
+        d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",
+        created_at=mylist_info.created_at,
+        updated_at=mylist_info.updated_at,
+        mylist=mylist_list,
     )
 
 
