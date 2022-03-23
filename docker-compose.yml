@@ -32,9 +32,9 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_ARBITRARY: 1
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: "${DB_ROOT_PW}"
+      PMA_HOST: "${DB_HOST}"
+      PMA_USER: "${DB_USER_NAME}"
+      PMA_PASSWORD: "${DB_PW}"
     restart: always
     ports:
       - 3031:80

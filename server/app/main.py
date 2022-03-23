@@ -5,4 +5,3 @@ from routers import mylist
 app = init_application()
 
 app.include_router(mylist.router)
-app.include_router(mylist.router)

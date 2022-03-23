@@ -32,3 +32,11 @@ Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=ENGINE)
 # DB接続用のセッションクラス、インスタンスが作成されると接続する
 Base.query = session.query_property()
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

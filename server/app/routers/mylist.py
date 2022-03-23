@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from db import SessionLocal
+from db import get_db
 import schemas.mylist as mylist_schema
 from schemas.mylist import MyListContent
 from service.scrape import Scrape
@@ -20,14 +20,6 @@ from utils.make_mylistContent_list import make_mylistContent_list
 from utils.const_values import D_ANIME_MYPAGE_BASE_URL
 
 router = APIRouter()
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.put("/my-list", response_model=mylist_schema.MyListGet)
