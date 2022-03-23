@@ -33,16 +33,15 @@ def get_db():
 @router.put("/my-list", response_model=mylist_schema.MyListGet)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(mylist.url)
-    update_mylist_res = update_mylist(db=db, mylist=mylist)
+    mylist_info = update_mylist(db=db, mylist=mylist)
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
-    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
-    update_mylist_contents_res = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
+    update_mylist_contents_list = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
     return mylist_schema.MyListGet(
         id=id,
         d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
-        mylist=update_mylist_contents_res,
+        mylist=update_mylist_contents_list,
     )
 
 
@@ -78,16 +77,10 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
 
 @router.post("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
-    create_mylist_res = create_mylist(db=db, mylist=mylist)
-    # スクレイピング
+    mylist_info = create_mylist(db=db, mylist=mylist)
     id = get_id_in_url(mylist.url)
-    mylist_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
-    for mylist_content in mylist_list:
-        create_mylist_contents_res = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
-    # DB空mylistの情報を取得
-    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
-    mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(db=db, id=id)
-    mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
+    mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    mylist_list = create_mylist_contents(db=db, mylist_content_list=mylist_content_list, id=id)
     return mylist_schema.MyListGet(
         id=id,
         d_anime_store_url=f"{D_ANIME_MYPAGE_BASE_URL}?shareListId={id}",

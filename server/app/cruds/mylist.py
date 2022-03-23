@@ -46,21 +46,23 @@ def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model
 
 
 def create_mylist_contents(
-    db: Session, mylist_content: mylist_schema.MyListContent, id: str
-) -> mylist_model.MylistContents:
-    db_mylist_content = mylist_model.MylistContents(
-        id=id,
-        title=mylist_content.title,
-        image=mylist_content.image,
-        url=mylist_content.url,
-    )
-    try:
-        db.add(db_mylist_content)
-        db.commit()
-        db.refresh(db_mylist_content)
-        return db_mylist_content
-    except exc.IntegrityError:
-        raise HTTPException(status_code=402, detail="this mylist is already exists.")
+    db: Session, mylist_content_list: List[mylist_schema.MyListContent], id: str
+) -> List[mylist_schema.MyListContent]:
+    for mylist_content in mylist_content_list:
+        db_mylist_content = mylist_model.MylistContents(
+            id=id,
+            title=mylist_content.title,
+            image=mylist_content.image,
+            url=mylist_content.url,
+        )
+        try:
+            db.add(db_mylist_content)
+            db.commit()
+            db.refresh(db_mylist_content)
+        except exc.IntegrityError:
+            raise HTTPException(status_code=402, detail="this mylist is already exists.")
+    return mylist_content_list
+    
 
 
 def update_mylist_contents(
@@ -73,12 +75,7 @@ def update_mylist_contents(
         db.delete(dlete_data)
         db.commit()
     # create
-    mylist_contents_list: List[mylist_model.MylistContents] = []
-    for mylist_content in mylist_content_list:
-        mylist_contents_list.append(
-            mylist_schema.MyListContent(title=mylist_content.title, image=mylist_content.image, url=mylist_content.url)
-        )
-        result = create_mylist_contents(db=db, mylist_content=mylist_content, id=id)
+    mylist_contents_list = create_mylist_contents(db=db, mylist_content_list=mylist_content_list, id=id)
     return mylist_contents_list
 
 
