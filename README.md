@@ -60,3 +60,9 @@ Create Table! ✨ 🍰 ✨
 ### 注意
 
 **データベースのテーブルが上記の方法で作れない場合**や、**phpMyAdmin にエラーで入れない場合**は、db ディレクトリ直下の save_data を削除してください。
+
+## ツール
+
+[d-anime-mylist-scheduler](https://github.com/OHMORIYUSUKE/d-anime-mylist-scheduler)
+
+DB の情報を更新するためのツールです。定期実行させることで、ユーザーが登録した d アニメストアのマイリストの状態を定期的に DB に更新させることができます。
