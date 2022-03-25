@@ -12,7 +12,7 @@ $ cp .env.sample .env
 
 ### ポートの説明
 
-`8000` : API  
+`80` : API  
 `3031` : phpMyAdmin
 
 ### API について

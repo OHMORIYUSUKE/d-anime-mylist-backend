@@ -13,8 +13,22 @@ services:
       DB_PW: "${DB_USER_PW}"
       DB_HOST: "${DB_HOST}"
       DB_NAME: "${DB_NAME}"
+    expose:
+      - 8000
+    networks:
+      - d-anime-mylist-web
+      - d-anime-mylist-db
+
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - web
     ports:
-      - 8000:8000
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - d-anime-mylist-web
 
   db:
     build: ./db
@@ -27,6 +41,8 @@ services:
       MYSQL_PASSWORD: "${DB_USER_PW}"
       MYSQL_ROOT_HOST: "%"
       TZ: "${TZ}"
+    networks:
+      - d-anime-mylist-db
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -40,3 +56,11 @@ services:
       - 3031:80
     depends_on:
       - db
+    networks:
+      - d-anime-mylist-db
+
+networks:
+  d-anime-mylist-web:
+    driver: bridge
+  d-anime-mylist-db:
+    driver: bridge
