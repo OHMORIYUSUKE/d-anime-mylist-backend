@@ -25,8 +25,8 @@ router = APIRouter()
 @router.put("/my-list", response_model=mylist_schema.MyListGet)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(mylist.url)
-    mylist_info = update_mylist(db=db, mylist=mylist)
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    mylist_info = update_mylist(db=db, mylist=mylist)
     update_mylist_contents_list = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
     return mylist_schema.MyListGet(
         id=id,
@@ -69,9 +69,9 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
 
 @router.post("/my-list", response_model=mylist_schema.MyListGet)
 async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
-    mylist_info = create_mylist(db=db, mylist=mylist)
     id = get_id_in_url(mylist.url)
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    mylist_info = create_mylist(db=db, mylist=mylist)
     mylist_list = create_mylist_contents(db=db, mylist_content_list=mylist_content_list, id=id)
     return mylist_schema.MyListGet(
         id=id,
