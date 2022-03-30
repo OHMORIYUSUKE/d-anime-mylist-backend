@@ -3,6 +3,7 @@ version: "3.0"
 services:
   web:
     build: ./server
+    hostname: web-server
     restart: always
     tty: true
     volumes:
@@ -15,12 +16,15 @@ services:
       DB_NAME: "${DB_NAME}"
     expose:
       - 8000
+    depends_on:
+      - db
     networks:
       - d-anime-mylist-web
       - d-anime-mylist-db
 
   nginx:
     image: nginx:alpine
+    hostname: nginx-server
     depends_on:
       - web
     ports:
@@ -32,6 +36,7 @@ services:
 
   db:
     build: ./db
+    hostname: db-server
     volumes:
       - ./db/save_data:/var/lib/mysql
     environment:
@@ -46,6 +51,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    hostname: phpmyadmin-server
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: "${DB_HOST}"
@@ -62,5 +68,13 @@ services:
 networks:
   d-anime-mylist-web:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
   d-anime-mylist-db:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24
