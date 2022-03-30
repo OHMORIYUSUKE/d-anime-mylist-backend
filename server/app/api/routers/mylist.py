@@ -18,15 +18,9 @@ import models.mylist as mylist_model
 from typing import List
 from utils.make_mylistContent_list import make_mylistContent_list
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
-import socket
 
 router = APIRouter()
 
-@router.get("/")
-async def root():
-    host = socket.gethostname()
-    ip = socket.gethostbyname(host)
-    return {"host": host, "ip": ip}
 
 @router.put("/my-list", response_model=mylist_schema.MyListGet)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
