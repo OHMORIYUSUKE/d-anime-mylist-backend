@@ -59,7 +59,7 @@ services:
       PMA_PASSWORD: "${DB_USER_PW}"
     restart: always
     ports:
-      - 3031:80
+      - 3030:80
     depends_on:
       - db
     networks:
