@@ -56,6 +56,18 @@ $ docker exec -it d-anime-mylist-web-1 bash
 Create Table! ✨ 🍰 ✨
 ```
 
+### テスト
+
+テストの実行の方法
+
+```
+$ docker exec -it d-anime-mylist-web-1 bash
+root@web-server:/app/api# cd ../test
+root@web-server:/app/test# ./test.sh
+```
+
+**failed**の箇所は修正してください。
+
 ### 注意
 
 **データベースのテーブルが上記の方法で作れない場合**や、**phpMyAdmin にエラーで入れない場合**は、db ディレクトリ直下の save_data を削除してください。
