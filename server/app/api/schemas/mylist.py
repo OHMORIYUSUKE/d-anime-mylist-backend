@@ -11,6 +11,8 @@ class MyListContent(BaseModel):
     title: str = Field(..., description="アニメのタイトル")
     image: str = Field(..., description="アニメのサムネイル画像のパス")
     url: str = Field(..., description="アニメの詳細ページ（d-anime ストアのページ）")
+    first: str = Field(..., description="第１話のタイトル")
+    stories: str = Field(..., description="アニメの話数")
 
 
 class MyListGet(BaseModel):

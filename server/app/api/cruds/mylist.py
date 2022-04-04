@@ -54,6 +54,8 @@ def create_mylist_contents(
             title=mylist_content.title,
             image=mylist_content.image,
             url=mylist_content.url,
+            first=mylist_content.first,
+            stories=mylist_content.stories,
         )
         try:
             db.add(db_mylist_content)
