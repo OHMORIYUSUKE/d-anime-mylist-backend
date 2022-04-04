@@ -33,15 +33,11 @@ class Scrape:
         title_elm_list: List[ResultSet] = soup.find_all("span", class_="ui-clamp")
         image_elm_list: List[ResultSet] = soup.find_all("img")
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
-        print(title_elm_list)
-        print(image_elm_list)
-        print(link_elm_list)
         stories_elm_list = []
+        first_title_elm_list = []
         for link_elm in link_elm_list:
-            print("リンク："+link_elm.get("href"))
             next_soup = self.__get_html(link_elm.get("href"))
-            first_title_elm_list = next_soup.find("span", class_="ui-clamp webkit2LineClamp")
-            print(first_title_elm_list)
+            first_title_elm_list.append(next_soup.find("span", class_="ui-clamp webkit2LineClamp"))
 
             stories_tmp = next_soup.find("div", class_="titleWrap")
             stories = " "
@@ -51,6 +47,7 @@ class Scrape:
             except:
                 pass
             stories_elm_list.append(stories)
+            time.sleep(3)
 
 
         mylist_list: List[mylist_schema.MyListContent] = []

@@ -18,3 +18,5 @@ class MylistContents(Base):
     title = Column("title", String(255), primary_key=True)
     image = Column("image", String(255))
     url = Column("url", String(255))
+    first = Column("first", String(255))
+    stories = Column("stories", String(255))
