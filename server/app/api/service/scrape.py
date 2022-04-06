@@ -47,7 +47,7 @@ class Scrape:
             except:
                 pass
             stories_elm_list.append(stories)
-            time.sleep(3)
+            time.sleep(1)
 
 
         mylist_list: List[mylist_schema.MyListContent] = []
