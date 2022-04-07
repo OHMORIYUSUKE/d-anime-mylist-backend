@@ -40,8 +40,7 @@ class Scrape:
         for (title_elm, link_elm) in zip(title_elm_list, link_elm_list):
             mylist_list.append(
                 mylist_schema.MyListContent(
-                    id=get_id_in_url(url=link_elm.get("href"), param_name="workId"),
-                    title=title_elm.text,
+                    anime_id=get_id_in_url(url=link_elm.get("href"), param_name="workId"), mylist_id=id
                 )
             )
 
@@ -60,7 +59,7 @@ class Scrape:
         image = image_elm.get("src")
         time.sleep(1)
         return mylist_schema.AnimeInfo(
-            id=id,
+            anime_id=id,
             first=first_title_elm.text,
             stories=stories,
             image=image,

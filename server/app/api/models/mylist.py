@@ -16,7 +16,6 @@ class MylistContents(Base):
     __tablename__ = "mylistContents"
     mylist_id = Column("mylist_id", String(255), primary_key=True, nullable=False)
     anime_id = Column("anime_id", String(255), primary_key=True, nullable=False)
-    title = Column("title", String(255), primary_key=True)
 
 
 class AnimeInfo(Base):

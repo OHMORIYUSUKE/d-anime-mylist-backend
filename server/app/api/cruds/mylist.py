@@ -51,9 +51,7 @@ def create_mylist_contents(
     db: Session, mylist_content_list: List[mylist_schema.MyListContent], id: str
 ) -> List[mylist_schema.MyListContent]:
     for mylist_content in mylist_content_list:
-        db_mylist_content = mylist_model.MylistContents(
-            mylist_id=id, title=mylist_content.title, anime_id=mylist_content.id
-        )
+        db_mylist_content = mylist_model.MylistContents(mylist_id=id, anime_id=mylist_content.anime_id)
         try:
             db.add(db_mylist_content)
             db.commit()
@@ -96,10 +94,10 @@ def create_anime_info(
     response_list = []
     for mylist_content in mylist_content_list:
         # アニメ情報をスクレイピング
-        anime_info = Scrape().anime_info(mylist_content.id)
+        anime_info = Scrape().anime_info(mylist_content.anime_id)
         db_mylist_content = mylist_model.AnimeInfo(
-            title=mylist_content.title,
-            anime_id=mylist_content.id,
+            title=anime_info.title,
+            anime_id=anime_info.anime_id,
             image=anime_info.image,
             url=anime_info.url,
             first=anime_info.first,
@@ -108,9 +106,8 @@ def create_anime_info(
         # スキーマ
         response_list.append(
             mylist_schema.AnimeInfo(
-                id=mylist_content.id,
-                title=mylist_content.title,
-                anime_id=mylist_content.id,
+                title=anime_info.title,
+                anime_id=mylist_content.anime_id,
                 image=anime_info.image,
                 url=anime_info.url,
                 first=anime_info.first,

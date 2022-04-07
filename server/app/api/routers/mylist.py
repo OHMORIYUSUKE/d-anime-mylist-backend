@@ -23,13 +23,6 @@ from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 router = APIRouter()
 
 
-@router.get("/")
-async def root():
-    url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=21025"
-    result = Scrape().anime_info(url)
-    return {"first": result.first, "id": result.id, "storie": result.stories}
-
-
 @router.put("/my-list", response_model=mylist_schema.MyListResponse)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
@@ -83,7 +76,7 @@ async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(ge
     mylist_list = create_mylist_contents(db=db, mylist_content_list=mylist_content_list, id=id)
     mylist_animeinfo_list = create_anime_info(db=db, mylist_content_list=mylist_list)
     return mylist_schema.MyListResponse(
-        id=id,
+        mylist_id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,

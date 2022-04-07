@@ -9,7 +9,7 @@ class MyListPost(BaseModel):
 
 # フロントエンドに返すデータ
 class MylistContentResponseInfo(BaseModel):
-    id: str = Field(..., description="アニメのID")
+    anime_id: str = Field(..., description="アニメのID")
     title: str = Field(..., description="アニメのタイトル")
     first: str = Field(..., description="第１話のタイトル")
     stories: str = Field(..., description="アニメの話数")
@@ -18,7 +18,7 @@ class MylistContentResponseInfo(BaseModel):
 
 
 class MyListResponse(BaseModel):
-    id: str = Field(..., description="マイリストのID")
+    mylist_id: str = Field(..., description="マイリストのID")
     d_anime_store_url: str = Field(..., description="dアニメストアのマイリストのURL")
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
@@ -27,12 +27,12 @@ class MyListResponse(BaseModel):
 
 # crud用
 class MyListContent(BaseModel):
-    id: str = Field(..., description="アニメのID")
-    title: str = Field(..., description="アニメのタイトル")
+    anime_id: str = Field(..., description="アニメのID")
+    mylist_id: str = Field(..., description="マイリストのID")
 
 
 class AnimeInfo(BaseModel):
-    id: str = Field(..., description="アニメのID")
+    anime_id: str = Field(..., description="アニメのID")
     title: str = Field(..., description="アニメのタイトル")
     first: str = Field(..., description="第１話のタイトル")
     stories: str = Field(..., description="アニメの話数")
@@ -41,7 +41,7 @@ class AnimeInfo(BaseModel):
 
 
 class MyListInfo(BaseModel):
-    id: str = Field(..., description="マイリストのID")
+    mylist_id: str = Field(..., description="マイリストのID")
     d_anime_store_url: str = Field(..., description="dアニメストアのマイリストのURL")
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
