@@ -45,7 +45,7 @@ async def mylist_get_all(db: Session = Depends(get_db)):
     for data in all_mylist_info_list:
         list_data.append(
             mylist_schema.MyListInfo(
-                id=data.mylist_id,
+                mylist_id=data.mylist_id,
                 d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={data.mylist_id}",
                 created_at=data.created_at,
                 updated_at=data.updated_at,
