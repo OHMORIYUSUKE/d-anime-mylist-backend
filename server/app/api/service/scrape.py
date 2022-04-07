@@ -8,6 +8,9 @@ from fastapi import FastAPI, HTTPException
 
 from typing import List
 import schemas.mylist as mylist_schema
+from service.get_id_in_url import get_id_in_url
+
+from utils.const_values import DANIME_MYLISTPAGE_BASE_URL, DANIME_ANIMEPAGE_BASE_URL
 
 
 class Scrape:
@@ -27,37 +30,40 @@ class Scrape:
         return soup
 
     def mylist(self, id: str) -> List[mylist_schema.MyListContent]:
-        soup = self.__get_html(f"https://anime.dmkt-sp.jp/animestore/public_list?shareListId={id}")
+        soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}")
         # print(soup.prettify())
 
         title_elm_list: List[ResultSet] = soup.find_all("span", class_="ui-clamp")
-        image_elm_list: List[ResultSet] = soup.find_all("img")
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
-        stories_elm_list = []
-        first_title_elm_list = []
-        for link_elm in link_elm_list:
-            next_soup = self.__get_html(link_elm.get("href"))
-            first_title_elm_list.append(next_soup.find("span", class_="ui-clamp webkit2LineClamp"))
-
-            stories_tmp = next_soup.find("div", class_="titleWrap")
-            stories = " "
-            try:
-                stories = stories_tmp.h1.span.text
-                print(stories_tmp.h1.span.text)
-            except:
-                pass
-            stories_elm_list.append(stories)
-            time.sleep(1)
-
 
         mylist_list: List[mylist_schema.MyListContent] = []
-        for (title_elm, link_elm, image_elm, first_title_elm, stories_elm) in zip(title_elm_list, link_elm_list, image_elm_list, first_title_elm_list, stories_elm_list):
+        for (title_elm, link_elm) in zip(title_elm_list, link_elm_list):
             mylist_list.append(
                 mylist_schema.MyListContent(
-                    title=title_elm.text, image=image_elm.get("data-src"), url=link_elm.get("href"), first=first_title_elm.text, stories=stories_elm
+                    id=get_id_in_url(url=link_elm.get("href"), param_name="workId"),
+                    title=title_elm.text,
                 )
             )
 
         if mylist_list == []:
             raise HTTPException(status_code=402, detail="mylist page not exist.")
         return mylist_list
+
+    def anime_info(self, id: str) -> mylist_schema.AnimeInfo:
+        soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={id}")
+        first_title_elm = soup.find("span", class_="ui-clamp webkit2LineClamp")
+        stories_tmp = soup.find("div", class_="titleWrap")
+        image_elm = soup.find("img", class_="lazyloaded")
+
+        stories = stories_tmp.h1.span.text
+        title = stories_tmp.h1.text.replace(stories, "")
+        image = image_elm.get("src")
+        time.sleep(1)
+        return mylist_schema.AnimeInfo(
+            id=id,
+            first=first_title_elm.text,
+            stories=stories,
+            image=image,
+            title=title,
+            url=f"{DANIME_ANIMEPAGE_BASE_URL}?workId={id}",
+        )

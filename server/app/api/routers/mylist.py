@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 import schemas.mylist as mylist_schema
-from schemas.mylist import MyListContent
+from schemas.mylist import MyListResponse, MyListPost
 from service.scrape import Scrape
 from service.get_id_in_url import get_id_in_url
 from cruds.mylist import (
@@ -13,6 +13,7 @@ from cruds.mylist import (
     create_mylist_contents,
     update_mylist,
     update_mylist_contents,
+    create_anime_info,
 )
 import models.mylist as mylist_model
 from typing import List
@@ -22,13 +23,20 @@ from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 router = APIRouter()
 
 
-@router.put("/my-list", response_model=mylist_schema.MyListGet)
+@router.get("/")
+async def root():
+    url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=21025"
+    result = Scrape().anime_info(url)
+    return {"first": result.first, "id": result.id, "storie": result.stories}
+
+
+@router.put("/my-list", response_model=mylist_schema.MyListResponse)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
-    id = get_id_in_url(mylist.url)
+    id = get_id_in_url(url=mylist.url, param_name="shareListId")
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
     mylist_info = update_mylist(db=db, mylist=mylist)
     update_mylist_contents_list = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
-    return mylist_schema.MyListGet(
+    return mylist_schema.MyListResponse(
         id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
@@ -44,8 +52,8 @@ async def mylist_get_all(db: Session = Depends(get_db)):
     for data in all_mylist_info_list:
         list_data.append(
             mylist_schema.MyListInfo(
-                id=data.id,
-                d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={data.id}",
+                id=data.mylist_id,
+                d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={data.mylist_id}",
                 created_at=data.created_at,
                 updated_at=data.updated_at,
             )
@@ -53,12 +61,12 @@ async def mylist_get_all(db: Session = Depends(get_db)):
     return list_data
 
 
-@router.get("/my-list", response_model=mylist_schema.MyListGet)
+@router.get("/my-list", response_model=mylist_schema.MyListResponse)
 async def mylist_get(id: str = None, db: Session = Depends(get_db)):
-    mylist_info: mylist_schema.MyListGet = get_mylist_by_id(db=db, id=id)
+    mylist_info: mylist_schema.MyListResponse = get_mylist_by_id(db=db, id=id)
     mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(db=db, id=id)
     mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
-    return mylist_schema.MyListGet(
+    return mylist_schema.MyListResponse(
         id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
@@ -67,16 +75,17 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/my-list", response_model=mylist_schema.MyListGet)
+@router.post("/my-list", response_model=mylist_schema.MyListResponse)
 async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
-    id = get_id_in_url(mylist.url)
-    mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
+    id = get_id_in_url(url=mylist.url, param_name="shareListId")
     mylist_info = create_mylist(db=db, mylist=mylist)
+    mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
     mylist_list = create_mylist_contents(db=db, mylist_content_list=mylist_content_list, id=id)
-    return mylist_schema.MyListGet(
+    mylist_animeinfo_list = create_anime_info(db=db, mylist_content_list=mylist_list)
+    return mylist_schema.MyListResponse(
         id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
-        mylist=mylist_list,
+        mylist=mylist_animeinfo_list,
     )

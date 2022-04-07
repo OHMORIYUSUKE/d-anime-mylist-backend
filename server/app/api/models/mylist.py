@@ -7,14 +7,21 @@ from db import Base, ENGINE
 
 class Mylists(Base):
     __tablename__ = "mylist"
-    id = Column("id", String(255), primary_key=True, nullable=False)
+    mylist_id = Column("mylist_id", String(255), primary_key=True, nullable=False)
     created_at = Column("created_at", DateTime, default=datetime.now(), nullable=False)
     updated_at = Column("updated_at", DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
 
 
 class MylistContents(Base):
     __tablename__ = "mylistContents"
-    id = Column("id", String(255), primary_key=True, nullable=False)
+    mylist_id = Column("mylist_id", String(255), primary_key=True, nullable=False)
+    anime_id = Column("anime_id", String(255), primary_key=True, nullable=False)
+    title = Column("title", String(255), primary_key=True)
+
+
+class AnimeInfo(Base):
+    __tablename__ = "animeInfo"
+    anime_id = Column("anime_id", String(255), primary_key=True, nullable=False)
     title = Column("title", String(255), primary_key=True)
     image = Column("image", String(255))
     url = Column("url", String(255))
