@@ -12,23 +12,41 @@ from service.get_id_in_url import get_id_in_url
 from service.scrape import Scrape
 
 
-def get_mylist_by_id(db: Session, id: str) -> mylist_schema.MyListResponse:
-    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.id == id).first()
+def get_mylist_by_id(db: Session, mylist_id: str) -> mylist_schema.MyListResponse:
+    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.mylist_id == mylist_id).first()
     if result == None:
         raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
     return result
 
 
 def get_mylist_contents_by_id(
-    db: Session, id: str, skip: int = 0, limit: int = 500
-) -> List[mylist_model.MylistContents]:
-    return (
+    db: Session, mylist_id: str, skip: int = 0, limit: int = 500
+) -> List[mylist_schema.AnimeInfo]:
+    mylist_content_list = (
         db.query(mylist_model.MylistContents)
-        .filter(mylist_model.MylistContents.id == id)
+        .filter(mylist_model.MylistContents.mylist_id == mylist_id)
         .offset(skip)
         .limit(limit)
         .all()
     )
+    response_list = []
+    anime_list = []
+    for data in mylist_content_list:
+        anime_list.append(
+            db.query(mylist_model.AnimeInfo).filter(mylist_model.AnimeInfo.anime_id == data.anime_id).first()
+        )
+    for data in anime_list:
+        response_list.append(
+            mylist_schema.AnimeInfo(
+                anime_id=data.anime_id,
+                title=data.title,
+                first=data.first,
+                stories=data.stories,
+                image=data.image,
+                url=data.url,
+            )
+        )
+    return response_list
 
 
 def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylists]:

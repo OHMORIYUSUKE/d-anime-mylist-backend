@@ -17,7 +17,6 @@ from cruds.mylist import (
 )
 import models.mylist as mylist_model
 from typing import List
-from utils.make_mylistContent_list import make_mylistContent_list
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 
 router = APIRouter()
@@ -56,15 +55,14 @@ async def mylist_get_all(db: Session = Depends(get_db)):
 
 @router.get("/my-list", response_model=mylist_schema.MyListResponse)
 async def mylist_get(id: str = None, db: Session = Depends(get_db)):
-    mylist_info: mylist_schema.MyListResponse = get_mylist_by_id(db=db, id=id)
-    mylist_list_in_id: List[mylist_model.MylistContents] = get_mylist_contents_by_id(db=db, id=id)
-    mylist_list: List[mylist_schema.MyListContent] = make_mylistContent_list(mylist_list_in_id=mylist_list_in_id)
+    mylist_info = get_mylist_by_id(db=db, mylist_id=id)
+    mylist_content_list = get_mylist_contents_by_id(db=db, mylist_id=id)
     return mylist_schema.MyListResponse(
-        id=id,
+        mylist_id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
-        mylist=mylist_list,
+        mylist=mylist_content_list,
     )
 
 
