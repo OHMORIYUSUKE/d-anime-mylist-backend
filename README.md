@@ -1,4 +1,4 @@
-# d-anime-mylist
+# d-anime-mylist-backend
 
 ## 開発について
 
