@@ -21,8 +21,8 @@ class MylistContents(Base):
 class AnimeInfo(Base):
     __tablename__ = "animeInfo"
     anime_id = Column("anime_id", String(255), primary_key=True, nullable=False)
-    title = Column("title", String(255), primary_key=True)
-    image = Column("image", String(255))
-    url = Column("url", String(255))
-    first = Column("first", String(255))
-    stories = Column("stories", String(255))
+    title = Column("title", String(255), primary_key=True, nullable=False)
+    image = Column("image", String(255), nullable=False)
+    url = Column("url", String(255), nullable=False)
+    first = Column("first", String(255), nullable=False)
+    stories = Column("stories", String(255), nullable=False)
