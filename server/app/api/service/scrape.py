@@ -54,9 +54,15 @@ class Scrape:
         stories_tmp = soup.find("div", class_="titleWrap")
         image_elm = soup.find("img", class_="lazyloaded")
 
-        stories = stories_tmp.h1.span.text
-        title = stories_tmp.h1.text.replace(stories, "")
-        image = image_elm.get("src")
+        stories = ""
+        title = ""
+        image = ""
+        try:
+            stories = stories_tmp.h1.span.text
+            title = stories_tmp.h1.text.replace(stories, "")
+            image = image_elm.get("src")
+        except:
+            print("======================エラー===============================")
         time.sleep(1)
         return mylist_schema.AnimeInfo(
             anime_id=id,

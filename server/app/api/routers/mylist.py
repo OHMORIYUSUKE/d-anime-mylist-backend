@@ -21,19 +21,20 @@ from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 
 router = APIRouter()
 
-
+# TODO
 @router.put("/my-list", response_model=mylist_schema.MyListResponse)
 async def create_item(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
     mylist_content_list: List[mylist_schema.MyListContent] = Scrape().mylist(id)
     mylist_info = update_mylist(db=db, mylist=mylist)
     update_mylist_contents_list = update_mylist_contents(db=db, mylist=mylist, mylist_content_list=mylist_content_list)
+    mylist_content_anime_info_list = get_mylist_contents_by_id(db=db, mylist_id=id)
     return mylist_schema.MyListResponse(
-        id=id,
+        mylist_id=id,
         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
         created_at=mylist_info.created_at,
         updated_at=mylist_info.updated_at,
-        mylist=update_mylist_contents_list,
+        mylist=mylist_content_anime_info_list,
     )
 
 
@@ -66,6 +67,8 @@ async def mylist_get(id: str = None, db: Session = Depends(get_db)):
     )
 
 
+# TODO
+# AnimeInfoがDBにある場合はDBから取得する
 @router.post("/my-list", response_model=mylist_schema.MyListResponse)
 async def mylist_post(mylist: mylist_schema.MyListPost, db: Session = Depends(get_db)):
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
