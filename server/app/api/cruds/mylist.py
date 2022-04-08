@@ -63,7 +63,7 @@ def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model
         db.refresh(db_mylist)
         return db_mylist
     except exc.IntegrityError:
-        raise HTTPException(status_code=402, detail="this mylist is already exists.")
+        raise HTTPException(status_code=409, detail="this mylist is already exists.")
 
 
 def create_mylist_contents(
@@ -76,7 +76,7 @@ def create_mylist_contents(
             db.commit()
             db.refresh(db_mylist_content)
         except exc.IntegrityError:
-            raise HTTPException(status_code=402, detail="this mylist is already exists.")
+            raise HTTPException(status_code=409, detail="this mylist is already exists.")
     return mylist_content_list
 
 
@@ -149,7 +149,7 @@ def create_anime_info(
                 db.commit()
                 db.refresh(db_mylist_content)
             except exc.IntegrityError:
-                raise HTTPException(status_code=402, detail="this mylist is already exists.")
+                raise HTTPException(status_code=409, detail="this mylist is already exists.")
         elif anime_info_from_db.stories == " ":
             # 情報が古かった(情報を更新)
             anime_info = Scrape().anime_info(mylist_content.anime_id)
