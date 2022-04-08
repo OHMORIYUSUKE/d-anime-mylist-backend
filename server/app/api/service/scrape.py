@@ -66,7 +66,7 @@ class Scrape:
             title = stories_tmp.h1.text.replace(stories, "")
             image = image_elm.img.get("src")
         except:
-            print("======================エラー===============================")
+            pass
         time.sleep(1)
         return mylist_schema.AnimeInfo(
             anime_id=id,

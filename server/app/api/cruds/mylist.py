@@ -124,7 +124,6 @@ def create_anime_info(
         if anime_info_from_db == None:
             # 存在していなかった
             # アニメ情報をスクレイピング
-            print("======================スクレイピング==========================")
             anime_info = Scrape().anime_info(mylist_content.anime_id)
             db_mylist_content = mylist_model.AnimeInfo(
                 title=anime_info.title,
@@ -151,16 +150,14 @@ def create_anime_info(
                 db.refresh(db_mylist_content)
             except exc.IntegrityError:
                 raise HTTPException(status_code=402, detail="this mylist is already exists.")
-        elif anime_info_from_db.stories == "":
-            # 情報が古かった
-            print("======================情報を更新==========================")
+        elif anime_info_from_db.stories == " ":
+            # 情報が古かった(情報を更新)
             anime_info = Scrape().anime_info(mylist_content.anime_id)
             db_mylist = db.query(mylist_model.AnimeInfo).filter(mylist_model.AnimeInfo == mylist_content.anime_id)
             db_mylist.update({mylist_model.AnimeInfo.stories: anime_info.first})
             db.commit()
         else:
-            print("======================存在していた==========================")
-            # 存在していた
+            # 存在していた(DBからデータを取得)
             response_list.append(
                 mylist_schema.AnimeInfo(
                     title=anime_info_from_db.title,
