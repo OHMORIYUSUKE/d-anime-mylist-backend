@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from bs4 import ResultSet
 import time
+import re
 
 from fastapi import FastAPI, HTTPException
 
@@ -52,15 +53,18 @@ class Scrape:
         soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={id}")
         first_title_elm = soup.find("span", class_="ui-clamp webkit2LineClamp")
         stories_tmp = soup.find("div", class_="titleWrap")
-        image_elm = soup.find("img", class_="lazyloaded")
+        image_elm = soup.find("div", class_="imgWrap16x9")
 
-        stories = ""
+        stories = " "
         title = ""
         image = ""
         try:
             stories = stories_tmp.h1.span.text
+        except:
+            pass
+        try:
             title = stories_tmp.h1.text.replace(stories, "")
-            image = image_elm.get("src")
+            image = image_elm.img.get("src")
         except:
             print("======================エラー===============================")
         time.sleep(1)
