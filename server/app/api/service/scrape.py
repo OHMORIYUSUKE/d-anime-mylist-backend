@@ -34,11 +34,10 @@ class Scrape:
         soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}")
         # print(soup.prettify())
 
-        title_elm_list: List[ResultSet] = soup.find_all("span", class_="ui-clamp")
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
 
         mylist_list: List[mylist_schema.MyListContent] = []
-        for (title_elm, link_elm) in zip(title_elm_list, link_elm_list):
+        for link_elm in link_elm_list:
             mylist_list.append(
                 mylist_schema.MyListContent(
                     anime_id=get_id_in_url(url=link_elm.get("href"), param_name="workId"), mylist_id=id
