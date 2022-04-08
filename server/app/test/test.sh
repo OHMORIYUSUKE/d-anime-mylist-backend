@@ -3,3 +3,5 @@
 python config.py
 
 pytest
+
+python config.py
