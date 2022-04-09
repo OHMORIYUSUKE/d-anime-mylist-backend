@@ -69,7 +69,7 @@ class Scrape:
         time.sleep(1)
         return mylist_schema.AnimeInfo(
             anime_id=id,
-            first=first_title_elm.text,
+            first=first_title_elm.text if first_title_elm.text != "　" else " ",
             stories=stories,
             image=image,
             title=title,
