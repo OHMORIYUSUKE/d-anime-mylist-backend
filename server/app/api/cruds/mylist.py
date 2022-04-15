@@ -15,11 +15,14 @@ from utils.scrape import Scrape
 """
 mylist テーブル
 """
+
+
 def get_mylist_by_mylistId(db: Session, mylist_id: str) -> mylist_schema.MyListResponse:
     result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.mylist_id == mylist_id).first()
     if result == None:
         raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
     return result
+
 
 def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model.Mylists:
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
@@ -31,6 +34,7 @@ def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model
         return db_mylist
     except exc.IntegrityError:
         raise HTTPException(status_code=409, detail="this mylist is already exists.")
+
 
 def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schema.MyListInfo:
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
@@ -49,6 +53,7 @@ def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schem
         updated_at=result.updated_at,
     )
 
+
 def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylists]:
     return db.query(mylist_model.Mylists).offset(skip).limit(limit).all()
 
@@ -56,6 +61,8 @@ def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylis
 """
 mylistContents テーブル
 """
+
+
 def get_mylistContents_by_mylistId(
     db: Session, mylist_id: str, skip: int = 0, limit: int = 500
 ) -> List[mylist_schema.AnimeInfo]:
@@ -117,9 +124,9 @@ def delete_mylistContents(
 """
 animenfoテーブル
 """
-def get_animeInfo(
-    db: Session, mylist_content_list: List[mylist_schema.MyListContent]
-) -> List[mylist_schema.AnimeInfo]:
+
+
+def get_animeInfo(db: Session, mylist_content_list: List[mylist_schema.MyListContent]) -> List[mylist_schema.AnimeInfo]:
     response_list = []
     for mylist_content in mylist_content_list:
         # アニメ情報がDBに存在しているか
