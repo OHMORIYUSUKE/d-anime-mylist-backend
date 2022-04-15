@@ -48,6 +48,7 @@ class MyListInfo(BaseModel):
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
 
+
 # データベースからデータを取得・作成
 # TODO 使う
 class MylistId(BaseModel):
