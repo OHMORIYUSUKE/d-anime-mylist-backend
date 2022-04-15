@@ -67,8 +67,8 @@ def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model
 
 
 def create_mylist_contents(
-    db: Session, mylist_content_list: List[mylist_schema.MyListContent], id: str
-) -> List[mylist_schema.MyListContent]:
+    db: Session, mylist_content_list: List[mylist_schema.MyListContents], id: str
+) -> List[mylist_schema.MyListContents]:
     for mylist_content in mylist_content_list:
         db_mylist_content = mylist_model.MylistContents(mylist_id=id, anime_id=mylist_content.anime_id)
         try:
@@ -81,7 +81,7 @@ def create_mylist_contents(
 
 
 def update_mylist_contents(
-    db: Session, mylist: mylist_schema.MyListPost, mylist_content_list: List[mylist_schema.MyListContent]
+    db: Session, mylist: mylist_schema.MyListPost, mylist_content_list: List[mylist_schema.MyListContents]
 ) -> List[mylist_model.MylistContents]:
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
     # deleat
@@ -113,7 +113,7 @@ def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schem
 
 
 def create_anime_info(
-    db: Session, mylist_content_list: List[mylist_schema.MyListContent]
+    db: Session, mylist_content_list: List[mylist_schema.MyListContents]
 ) -> List[mylist_schema.AnimeInfo]:
     response_list = []
     for mylist_content in mylist_content_list:

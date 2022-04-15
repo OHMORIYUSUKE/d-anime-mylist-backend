@@ -30,16 +30,16 @@ class Scrape:
         soup = BeautifulSoup(html, "html.parser")
         return soup
 
-    def mylist(self, id: str) -> List[mylist_schema.MyListContent]:
+    def mylist(self, id: str) -> List[mylist_schema.MyListContents]:
         soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}")
         # print(soup.prettify())
 
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
 
-        mylist_list: List[mylist_schema.MyListContent] = []
+        mylist_list: List[mylist_schema.MyListContents] = []
         for link_elm in link_elm_list:
             mylist_list.append(
-                mylist_schema.MyListContent(
+                mylist_schema.MyListContents(
                     anime_id=get_id_in_url(url=link_elm.get("href"), param_name="workId"), mylist_id=id
                 )
             )

@@ -26,7 +26,7 @@ class MyListResponse(BaseModel):
 
 
 # crud用
-class MyListContent(BaseModel):
+class MyListContents(BaseModel):
     anime_id: str = Field(..., description="アニメのID")
     mylist_id: str = Field(..., description="マイリストのID")
 
