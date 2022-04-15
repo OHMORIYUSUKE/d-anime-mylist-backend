@@ -12,6 +12,10 @@ from utils.get_id_in_url import get_id_in_url
 
 from utils.scrape import Scrape
 
+from cruds.CrudsMylist import CrudsMylist
+from cruds.CrudsMylistContents import CrudsMylistContents
+from cruds.CrudsAnimeInfo import CrudsAnimeInfo
+
 
 def get_mylist_by_id(db: Session, mylist_id: str) -> mylist_schema.MyListResponse:
     result = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == mylist_id).first()

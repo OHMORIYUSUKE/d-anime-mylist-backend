@@ -3,11 +3,11 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from bs4 import ResultSet
 import time
-import re
 
 from fastapi import FastAPI, HTTPException
 
 from typing import List
+import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
 from .get_id_in_url import get_id_in_url
 
@@ -30,16 +30,16 @@ class Scrape:
         soup = BeautifulSoup(html, "html.parser")
         return soup
 
-    def mylist(self, id: str) -> List[mylist_schema.MyListContents]:
-        soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}")
+    def mylist(self, mylist_id: mylist_schema.MylistId) -> List[mylist_model.MylistContents]:
+        soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={mylist_id.mylist_id}")
         # print(soup.prettify())
 
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
 
-        mylist_list: List[mylist_schema.MyListContents] = []
+        mylist_list: List[mylist_model.MylistContents] = []
         for link_elm in link_elm_list:
             mylist_list.append(
-                mylist_schema.MyListContents(
+                mylist_model.MylistContents(
                     anime_id=get_id_in_url(url=link_elm.get("href"), param_name="workId"), mylist_id=id
                 )
             )
@@ -48,8 +48,8 @@ class Scrape:
             raise HTTPException(status_code=402, detail="mylist page not exist.")
         return mylist_list
 
-    def anime_info(self, id: str) -> mylist_schema.AnimeInfo:
-        soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={id}")
+    def anime_info(self, anime_id: mylist_schema.AnimeId) -> mylist_model.AnimeInfo:
+        soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={anime_id.anime_id}")
         first_title_elm = soup.find("span", class_="ui-clamp webkit2LineClamp")
         stories_tmp = soup.find("div", class_="titleWrap")
         image_elm = soup.find("div", class_="imgWrap16x9")
@@ -67,7 +67,7 @@ class Scrape:
         except:
             pass
         time.sleep(1)
-        return mylist_schema.AnimeInfo(
+        return mylist_model.AnimeInfo(
             anime_id=id,
             first=first_title_elm.text if first_title_elm.text != "　" else " ",
             stories=stories,
