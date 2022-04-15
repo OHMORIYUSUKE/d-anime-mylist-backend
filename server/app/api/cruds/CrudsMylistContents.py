@@ -16,7 +16,7 @@ class CrudsMylistContents:
     mylistContents テーブル
     """
 
-    def get_mylistContents_by_mylistId(
+    def get_by_mylistId(
         db: Session, mylist_id: mylist_schema.MylistId, skip: int = 0, limit: int = 500
     ) -> List[mylist_model.MylistContents]:
         return (
@@ -27,7 +27,7 @@ class CrudsMylistContents:
             .all()
         )
 
-    def get_mylistContents_by_mylistId_and_animeId(
+    def get_by_mylistId_and_animeId(
         db: Session, mylist_contents: mylist_model.MylistContents
     ) -> List[mylist_model.MylistContents]:
         return (
@@ -39,7 +39,7 @@ class CrudsMylistContents:
             .first()
         )
 
-    def create_mylistContents(db: Session, mylist_contents: mylist_model.MylistContents) -> mylist_model.MylistContents:
+    def create(db: Session, mylist_contents: mylist_model.MylistContents) -> mylist_model.MylistContents:
         db_mylist_content = mylist_model.MylistContents(
             mylist_id=mylist_contents.mylist_id, anime_id=mylist_contents.anime_id
         )
@@ -48,10 +48,10 @@ class CrudsMylistContents:
         db.refresh(db_mylist_content)
         return db_mylist_content
 
-    def delete_mylistContents_by_mylistId_and_animeId(
+    def delete_by_mylistId_and_animeId(
         self, db: Session, mylist_contents: mylist_model.MylistContents
     ) -> mylist_model.MylistContents:
-        result = self.get_mylistContents_by_mylistId_and_animeId(db=db, mylist_contents=mylist_contents)
+        result = self.get_by_mylistId_and_animeId(db=db, mylist_contents=mylist_contents)
         dlete_data = (
             db.query(mylist_model.MylistContents)
             .filter(
@@ -64,10 +64,10 @@ class CrudsMylistContents:
         db.commit()
         return result
 
-    def delete_mylistContents_by_mylistId(
+    def delete_by_mylistId(
         self, db: Session, mylist_id: mylist_schema.MylistId
     ) -> List[mylist_model.MylistContents]:
-        result = self.get_mylistContents_by_mylistId(db=db, mylist_id=mylist_id)
+        result = self.get_by_mylistId(db=db, mylist_id=mylist_id)
         dlete_data = (
             db.query(mylist_model.MylistContents)
             .filter(mylist_model.MylistContents.mylist_id == mylist_id.mylist_id)

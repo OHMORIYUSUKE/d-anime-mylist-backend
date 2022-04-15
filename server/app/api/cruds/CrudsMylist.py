@@ -16,13 +16,13 @@ class CrudsMylist:
     mylist テーブル
     """
 
-    def get_mylist_by_mylistId(db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
+    def get_by_mylistId(db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
         result = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == mylist_id).first()
         if result == None:
             raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
         return result
 
-    def create_mylist(db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
+    def create(db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
         db_mylist = mylist_model.Mylist(mylist_id=mylist_id.mylist_id)
         try:
             db.add(db_mylist)
@@ -32,13 +32,13 @@ class CrudsMylist:
         except exc.IntegrityError:
             raise HTTPException(status_code=409, detail="this mylist is already exists.")
 
-    def update_mylist(self, db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
+    def update(self, db: Session, mylist_id: mylist_schema.MylistId) -> mylist_model.Mylist:
         db_mylist = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == mylist_id.mylist_id)
         db_mylist.update(
             {mylist_model.Mylist.mylist_id: mylist_id.mylist_id, mylist_model.Mylist.updated_at: datetime.now()}
         )
         db.commit()
-        return self.get_mylist_by_mylistId(db=db, mylist_id=mylist_id)
+        return self.get_by_mylistId(db=db, mylist_id=mylist_id)
 
     def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylist]:
         return db.query(mylist_model.Mylist).offset(skip).limit(limit).all()
