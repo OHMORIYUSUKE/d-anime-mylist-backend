@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 
 from typing import List
 import schemas.mylist as mylist_schema
-from service.get_id_in_url import get_id_in_url
+from .get_id_in_url import get_id_in_url
 
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL, DANIME_ANIMEPAGE_BASE_URL
 

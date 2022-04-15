@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from db import get_db
 import schemas.mylist as mylist_schema
 from schemas.mylist import MyListResponse, MyListPost
-from service.scrape import Scrape
-from service.get_id_in_url import get_id_in_url
-from cruds.mylist import (
+from utils.scrape import Scrape
+from utils.get_id_in_url import get_id_in_url
+from service.mylist import (
     create_mylist,
     get_mylist_by_id,
     get_mylist_all,
