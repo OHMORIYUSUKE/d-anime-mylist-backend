@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from db import Base, ENGINE
 
 
-class Mylists(Base):
+class Mylist(Base):
     __tablename__ = "mylist"
     mylist_id = Column("mylist_id", String(255), primary_key=True, nullable=False)
     created_at = Column("created_at", DateTime, default=datetime.now(), nullable=False)

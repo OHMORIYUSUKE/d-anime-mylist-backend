@@ -6,7 +6,7 @@ from datetime import datetime
 
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
-from models.mylist import Mylists
+from models.mylist import Mylist
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 from utils.get_id_in_url import get_id_in_url
 
@@ -14,7 +14,7 @@ from utils.scrape import Scrape
 
 
 def get_mylist_by_id(db: Session, mylist_id: str) -> mylist_schema.MyListResponse:
-    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.mylist_id == mylist_id).first()
+    result = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == mylist_id).first()
     if result == None:
         raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
     return result
@@ -50,13 +50,13 @@ def get_mylist_contents_by_id(
     return response_list
 
 
-def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylists]:
-    return db.query(mylist_model.Mylists).offset(skip).limit(limit).all()
+def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylist]:
+    return db.query(mylist_model.Mylist).offset(skip).limit(limit).all()
 
 
-def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model.Mylists:
+def create_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_model.Mylist:
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
-    db_mylist = mylist_model.Mylists(mylist_id=id)
+    db_mylist = mylist_model.Mylist(mylist_id=id)
     try:
         db.add(db_mylist)
         db.commit()
@@ -97,12 +97,12 @@ def update_mylist_contents(
 def update_mylist(db: Session, mylist: mylist_schema.MyListPost) -> mylist_schema.MyListInfo:
     id = get_id_in_url(url=mylist.url, param_name="shareListId")
     # select(不正にupdateさせない)(updateしたカラムを返す)
-    result = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.mylist_id == id).first()
+    result = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == id).first()
     if result == None:
         raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
     # update
-    db_mylist = db.query(mylist_model.Mylists).filter(mylist_model.Mylists.mylist_id == id)
-    db_mylist.update({mylist_model.Mylists.mylist_id: id, mylist_model.Mylists.updated_at: datetime.now()})
+    db_mylist = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == id)
+    db_mylist.update({mylist_model.Mylist.mylist_id: id, mylist_model.Mylist.updated_at: datetime.now()})
     db.commit()
     return mylist_schema.MyListInfo(
         mylist_id=result.mylist_id,
