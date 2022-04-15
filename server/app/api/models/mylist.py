@@ -24,5 +24,5 @@ class AnimeInfo(Base):
     title = Column("title", String(255), primary_key=True, nullable=False)
     image = Column("image", String(255), nullable=False)
     url = Column("url", String(255), nullable=False)
-    first = Column("first", String(255), nullable=False)
-    stories = Column("stories", String(255), nullable=False)
+    first = Column("first", String(255), nullable=False) # 1話タイトル
+    stories = Column("stories", String(255), nullable=False) # 話数

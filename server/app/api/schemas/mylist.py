@@ -2,12 +2,13 @@ from datetime import datetime, time, timedelta
 from pydantic import BaseModel, Field
 from typing import List
 
-# フロントエンド空受け取るデータ
+# フロントエンドから受け取るデータ
 class MyListPost(BaseModel):
     url: str = Field(..., description="dアニメストアのマイリストのURL")
 
 
 # フロントエンドに返すデータ
+# TODO 使う
 class MylistContentResponseInfo(BaseModel):
     anime_id: str = Field(..., description="アニメのID")
     title: str = Field(..., description="アニメのタイトル")
@@ -26,6 +27,7 @@ class MyListResponse(BaseModel):
 
 
 # crud用
+# TODO　使わないように実装する
 class MyListContents(BaseModel):
     anime_id: str = Field(..., description="アニメのID")
     mylist_id: str = Field(..., description="マイリストのID")
@@ -45,3 +47,12 @@ class MyListInfo(BaseModel):
     d_anime_store_url: str = Field(..., description="dアニメストアのマイリストのURL")
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
+
+# データベースからデータを取得・作成
+# TODO 使う
+class MylistId(BaseModel):
+    mylist_id: str = Field(..., description="マイリストのID")
+
+
+class AnimeId(BaseModel):
+    anime_id: str = Field(..., description="アニメのID")
