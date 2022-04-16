@@ -30,8 +30,8 @@ class Scrape:
         soup = BeautifulSoup(html, "html.parser")
         return soup
 
-    def mylist(self, mylist_id: mylist_schema.MylistId) -> List[mylist_model.MylistContents]:
-        soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={mylist_id.mylist_id}")
+    def mylist(self, mylist_id: str) -> List[mylist_model.MylistContents]:
+        soup = self.__get_html(f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={mylist_id}")
         # print(soup.prettify())
 
         link_elm_list: List[ResultSet] = soup.find_all("a", class_="itemModuleIn")
@@ -48,8 +48,8 @@ class Scrape:
             raise HTTPException(status_code=402, detail="mylist page not exist.")
         return mylist_list
 
-    def anime_info(self, anime_id: mylist_schema.AnimeId) -> mylist_model.AnimeInfo:
-        soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={anime_id.anime_id}")
+    def anime_info(self, anime_id: str) -> mylist_model.AnimeInfo:
+        soup = self.__get_html(f"{DANIME_ANIMEPAGE_BASE_URL}?workId={anime_id}")
         first_title_elm = soup.find("span", class_="ui-clamp webkit2LineClamp")
         stories_tmp = soup.find("div", class_="titleWrap")
         image_elm = soup.find("div", class_="imgWrap16x9")

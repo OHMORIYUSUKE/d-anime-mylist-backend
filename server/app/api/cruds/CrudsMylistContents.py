@@ -17,11 +17,11 @@ class CrudsMylistContents:
     """
 
     def get_by_mylistId(
-        db: Session, mylist_id: mylist_schema.MylistId, skip: int = 0, limit: int = 500
+        db: Session, mylist_id: str, skip: int = 0, limit: int = 500
     ) -> List[mylist_model.MylistContents]:
         return (
             db.query(mylist_model.MylistContents)
-            .filter(mylist_model.MylistContents.mylist_id == mylist_id.mylist_id)
+            .filter(mylist_model.MylistContents.mylist_id == mylist_id)
             .offset(skip)
             .limit(limit)
             .all()
@@ -64,14 +64,10 @@ class CrudsMylistContents:
         db.commit()
         return result
 
-    def delete_by_mylistId(
-        self, db: Session, mylist_id: mylist_schema.MylistId
-    ) -> List[mylist_model.MylistContents]:
+    def delete_by_mylistId(self, db: Session, mylist_id: str) -> List[mylist_model.MylistContents]:
         result = self.get_by_mylistId(db=db, mylist_id=mylist_id)
         dlete_data = (
-            db.query(mylist_model.MylistContents)
-            .filter(mylist_model.MylistContents.mylist_id == mylist_id.mylist_id)
-            .all()
+            db.query(mylist_model.MylistContents).filter(mylist_model.MylistContents.mylist_id == mylist_id).all()
         )
         db.delete(dlete_data)
         db.commit()

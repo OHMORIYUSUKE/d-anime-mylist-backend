@@ -47,13 +47,3 @@ class MyListInfo(BaseModel):
     d_anime_store_url: str = Field(..., description="dアニメストアのマイリストのURL")
     created_at: datetime = Field(..., description="データが作成された時間")
     updated_at: datetime = Field(..., description="データが更新された時間")
-
-
-# データベースからデータを取得・作成
-# TODO 使う
-class MylistId(BaseModel):
-    mylist_id: str = Field(..., description="マイリストのID")
-
-
-class AnimeId(BaseModel):
-    anime_id: str = Field(..., description="アニメのID")
