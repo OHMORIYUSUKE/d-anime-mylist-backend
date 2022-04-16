@@ -17,7 +17,7 @@ class CrudsMylistContents:
     """
 
     def get_by_mylistId(
-        db: Session, mylist_id: str, skip: int = 0, limit: int = 500
+        self, db: Session, mylist_id: str, skip: int = 0, limit: int = 500
     ) -> List[mylist_model.MylistContents]:
         return (
             db.query(mylist_model.MylistContents)
@@ -28,7 +28,7 @@ class CrudsMylistContents:
         )
 
     def get_by_mylistId_and_animeId(
-        db: Session, mylist_contents: mylist_model.MylistContents
+        self, db: Session, mylist_contents: mylist_model.MylistContents
     ) -> List[mylist_model.MylistContents]:
         return (
             db.query(mylist_model.MylistContents)
@@ -39,7 +39,7 @@ class CrudsMylistContents:
             .first()
         )
 
-    def create(db: Session, mylist_contents: mylist_model.MylistContents) -> mylist_model.MylistContents:
+    def create(self, db: Session, mylist_contents: mylist_model.MylistContents) -> mylist_model.MylistContents:
         db_mylist_content = mylist_model.MylistContents(
             mylist_id=mylist_contents.mylist_id, anime_id=mylist_contents.anime_id
         )

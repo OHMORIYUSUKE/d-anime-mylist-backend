@@ -16,13 +16,13 @@ class CrudsMylist:
     mylist テーブル
     """
 
-    def get_by_mylistId(db: Session, mylist_id: str) -> mylist_model.Mylist:
+    def get_by_mylistId(self, db: Session, mylist_id: str) -> mylist_model.Mylist:
         result = db.query(mylist_model.Mylist).filter(mylist_model.Mylist.mylist_id == mylist_id).first()
         if result == None:
             raise HTTPException(status_code=402, detail="unknown mylist. you must register.")
         return result
 
-    def create(db: Session, mylist_id: str) -> mylist_model.Mylist:
+    def create(self, db: Session, mylist_id: str) -> mylist_model.Mylist:
         db_mylist = mylist_model.Mylist(mylist_id=mylist_id)
         try:
             db.add(db_mylist)
@@ -38,5 +38,5 @@ class CrudsMylist:
         db.commit()
         return self.get_by_mylistId(db=db, mylist_id=mylist_id)
 
-    def get_mylist_all(db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylist]:
+    def get_mylist_all(self, db: Session, skip: int = 0, limit: int = 10000) -> List[mylist_model.Mylist]:
         return db.query(mylist_model.Mylist).offset(skip).limit(limit).all()

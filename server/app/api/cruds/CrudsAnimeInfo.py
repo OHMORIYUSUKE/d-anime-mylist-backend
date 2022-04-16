@@ -16,10 +16,10 @@ class CrudsAnimeInfo:
     animenfoテーブル
     """
 
-    def get_by_animeId(db: Session, anime_id: str) -> List[mylist_model.AnimeInfo]:
+    def get_by_animeId(self, db: Session, anime_id: str) -> List[mylist_model.AnimeInfo]:
         return db.query(mylist_model.AnimeInfo).filter(mylist_model.AnimeInfo.anime_id == anime_id).first()
 
-    def create(db: Session, anime_info: mylist_model.AnimeInfo) -> mylist_model.AnimeInfo:
+    def create(self, db: Session, anime_info: mylist_model.AnimeInfo) -> mylist_model.AnimeInfo:
         db_anime_info = mylist_model.AnimeInfo(anime_info)
         db.add(db_anime_info)
         db.commit()
