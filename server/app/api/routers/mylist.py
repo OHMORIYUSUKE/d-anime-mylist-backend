@@ -33,8 +33,7 @@ router = APIRouter()
 
 @router.get("/my-list/all", response_model=List[mylist_schema.MyListInfo])
 async def mylist_get_all(db: Session = Depends(get_db)):
-    all_mylist_info_list = get_mylist_all(db=db)
-    return all_mylist_info_list
+    return get_mylist_all(db=db)
 
 
 # @router.get("/my-list", response_model=mylist_schema.MyListResponse)

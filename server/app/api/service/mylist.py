@@ -18,7 +18,7 @@ from cruds.crudsAnimeInfo import CrudsAnimeInfo
 
 
 def get_mylist_all(db: Session) -> List[mylist_schema.MyListInfo]:
-    mylist_all_list = CrudsMylist().get_mylist_all(db=db)
+    mylist_all_list = CrudsMylist(db=db).get_mylist_all()
     res = []
     for data in mylist_all_list:
         res.append(
