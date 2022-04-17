@@ -6,6 +6,8 @@ from typing import TypeVar, Union
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
 
+from fastapi import FastAPI, HTTPException
+
 
 class CrudsAnimeInfo:
     def __init__(self, db) -> None:
