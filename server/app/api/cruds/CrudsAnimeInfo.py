@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
-from fastapi import FastAPI, HTTPException
 from typing import List
 from datetime import datetime
 from typing import TypeVar, Union
-
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
 

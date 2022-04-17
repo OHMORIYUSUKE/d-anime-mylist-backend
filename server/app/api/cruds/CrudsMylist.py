@@ -1,9 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
-from fastapi import FastAPI, HTTPException
 from typing import List
 from datetime import datetime
-
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
 

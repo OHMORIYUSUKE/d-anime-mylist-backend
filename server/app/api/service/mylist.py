@@ -1,12 +1,8 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import exc
-from fastapi import FastAPI, HTTPException
 from typing import List
-from datetime import datetime
 
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
-from models.mylist import Mylist
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 from utils.get_id_in_url import get_id_in_url
 from utils.scrape import Scrape

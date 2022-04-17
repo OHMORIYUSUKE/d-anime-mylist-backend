@@ -2,12 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 import schemas.mylist as mylist_schema
-from utils.scrape import Scrape
-from utils.get_id_in_url import get_id_in_url
 from service.mylist import Service
-import models.mylist as mylist_model
 from typing import List
-from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 
 router = APIRouter()
 
