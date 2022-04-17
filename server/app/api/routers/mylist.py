@@ -4,9 +4,7 @@ from db import get_db
 import schemas.mylist as mylist_schema
 from utils.scrape import Scrape
 from utils.get_id_in_url import get_id_in_url
-from service.mylist import (
-    get_mylist_all,
-)
+from service.mylist import Service
 import models.mylist as mylist_model
 from typing import List
 from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
@@ -33,20 +31,12 @@ router = APIRouter()
 
 @router.get("/my-list/all", response_model=List[mylist_schema.MyListInfo])
 async def mylist_get_all(db: Session = Depends(get_db)):
-    return get_mylist_all(db=db)
+    return Service(db=db).get_mylist_all()
 
 
-# @router.get("/my-list", response_model=mylist_schema.MyListResponse)
-# async def mylist_get(id: str = None, db: Session = Depends(get_db)):
-#     mylist_info = get_mylist_by_id(db=db, mylist_id=id)
-#     mylist_content_list = get_mylist_contents_by_id(db=db, mylist_id=id)
-#     return mylist_schema.MyListResponse(
-#         mylist_id=id,
-#         d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={id}",
-#         created_at=mylist_info.created_at,
-#         updated_at=mylist_info.updated_at,
-#         mylist=mylist_content_list,
-#     )
+@router.get("/my-list", response_model=mylist_schema.MyList)
+async def mylist_get(id: str = None, db: Session = Depends(get_db)):
+    return Service(db=db).get_mylist(mylist_id=id)
 
 
 # @router.post("/my-list", response_model=mylist_schema.MyListResponse)
