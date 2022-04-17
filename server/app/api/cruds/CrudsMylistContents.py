@@ -63,7 +63,7 @@ class CrudsMylistContents:
                 mylist_model.MylistContents.anime_id == mylist_contents.anime_id,
                 mylist_model.MylistContents.mylist_id == mylist_contents.mylist_id,
             )
-            .all()
+            .first()
         )
         self.db.delete(dlete_data)
         self.db.commit()
@@ -74,6 +74,7 @@ class CrudsMylistContents:
         dlete_data = (
             self.db.query(mylist_model.MylistContents).filter(mylist_model.MylistContents.mylist_id == mylist_id).all()
         )
-        self.db.delete(dlete_data)
-        self.db.commit()
+        for dlete_data in dlete_data:
+            self.db.delete(dlete_data)
+            self.db.commit()
         return result

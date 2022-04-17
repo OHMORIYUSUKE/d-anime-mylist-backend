@@ -61,9 +61,39 @@ class Service:
 
     def create_mylist(self, post_data: mylist_schema.MyListPostPut) -> mylist_schema.MyList:
         mylist_id = get_id_in_url(post_data.url, param_name="shareListId")
+        mylist_list = Scrape().mylist(mylist_id=mylist_id)
         CrudsMylist(db=self.db).create(mylist_id=mylist_id)
         mylist_info = CrudsMylist(db=self.db).get_by_mylistId(mylist_id=mylist_id)
+        anime_info_list = []
+        for data in mylist_list:
+            CrudsMylistContents(db=self.db).create(
+                mylist_contents=mylist_model.MylistContents(mylist_id=mylist_id, anime_id=data.anime_id)
+            )
+            anime_info = self.__if_not_exist__create_anime_info__if_old_data__update_anime_info(anime_id=data.anime_id)
+            anime_info_list.append(
+                mylist_schema.MylistContents(
+                    anime_id=anime_info.anime_id,
+                    title=anime_info.title,
+                    first=anime_info.first,
+                    stories=anime_info.stories,
+                    image=anime_info.image,
+                    url=anime_info.url,
+                )
+            )
+        return mylist_schema.MyList(
+            mylist_id=mylist_id,
+            d_anime_store_url=f"{DANIME_MYLISTPAGE_BASE_URL}?shareListId={mylist_id}",
+            created_at=mylist_info.created_at,
+            updated_at=mylist_info.updated_at,
+            mylist=anime_info_list,
+        )
+
+    def update_mylist(self, post_data: mylist_schema.MyListPostPut) -> mylist_schema.MyList:
+        mylist_id = get_id_in_url(post_data.url, param_name="shareListId")
+        mylist_info = CrudsMylist(db=self.db).get_by_mylistId(mylist_id=mylist_id)
         mylist_list = Scrape().mylist(mylist_id=mylist_id)
+        CrudsMylist(db=self.db).update(mylist_id=mylist_id)
+        CrudsMylistContents(db=self.db).delete_by_mylistId(mylist_id=mylist_id)
         anime_info_list = []
         for data in mylist_list:
             CrudsMylistContents(db=self.db).create(
@@ -99,5 +129,6 @@ class Service:
         elif anime_info_from_db.stories == " ":
             anime_info = Scrape().anime_info(anime_id=anime_id)
             CrudsAnimeInfo(db=self.db).update(anime_info=anime_info)
+            return anime_info
         else:
             return anime_info_from_db
