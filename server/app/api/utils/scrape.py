@@ -68,10 +68,10 @@ class Scrape:
             pass
         time.sleep(1)
         return mylist_model.AnimeInfo(
-            anime_id=id,
+            anime_id=anime_id,
             first=first_title_elm.text if first_title_elm.text != "　" else " ",
             stories=stories,
             image=image,
             title=title,
-            url=f"{DANIME_ANIMEPAGE_BASE_URL}?workId={id}",
+            url=f"{DANIME_ANIMEPAGE_BASE_URL}?workId={anime_id}",
         )

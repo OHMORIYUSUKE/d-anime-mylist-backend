@@ -1,3 +1,4 @@
+from typing import TypeVar, Union
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from fastapi import FastAPI, HTTPException
@@ -38,14 +39,19 @@ class CrudsMylistContents:
             .first()
         )
 
-    def create(self, mylist_contents: mylist_model.MylistContents) -> mylist_model.MylistContents:
+    def create(
+        self, mylist_contents: mylist_model.MylistContents
+    ) -> Union[mylist_model.MylistContents, exc.IntegrityError]:
         db_mylist_content = mylist_model.MylistContents(
             mylist_id=mylist_contents.mylist_id, anime_id=mylist_contents.anime_id
         )
-        self.db.add(db_mylist_content)
-        self.db.commit()
-        self.db.refresh(db_mylist_content)
-        return db_mylist_content
+        try:
+            self.db.add(db_mylist_content)
+            self.db.commit()
+            self.db.refresh(db_mylist_content)
+            return db_mylist_content
+        except exc.IntegrityError:
+            return exc.IntegrityError
 
     def delete_by_mylistId_and_animeId(
         self, mylist_contents: mylist_model.MylistContents

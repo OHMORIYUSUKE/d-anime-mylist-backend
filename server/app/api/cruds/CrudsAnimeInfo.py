@@ -3,6 +3,7 @@ from sqlalchemy import exc
 from fastapi import FastAPI, HTTPException
 from typing import List
 from datetime import datetime
+from typing import TypeVar, Union
 
 import models.mylist as mylist_model
 import schemas.mylist as mylist_schema
@@ -17,11 +18,18 @@ class CrudsAnimeInfo:
     animenfoテーブル
     """
 
-    def get_by_animeId(self, anime_id: str) -> List[mylist_model.AnimeInfo]:
+    def get_by_animeId(self, anime_id: str) -> Union[mylist_model.AnimeInfo, None]:
         return self.db.query(mylist_model.AnimeInfo).filter(mylist_model.AnimeInfo.anime_id == anime_id).first()
 
     def create(self, anime_info: mylist_model.AnimeInfo) -> mylist_model.AnimeInfo:
-        db_anime_info = mylist_model.AnimeInfo(anime_info)
+        db_anime_info = mylist_model.AnimeInfo(
+            anime_id=anime_info.anime_id,
+            title=anime_info.title,
+            image=anime_info.image,
+            url=anime_info.url,
+            first=anime_info.first,
+            stories=anime_info.stories,
+        )
         self.db.add(db_anime_info)
         self.db.commit()
         self.db.refresh(db_anime_info)
