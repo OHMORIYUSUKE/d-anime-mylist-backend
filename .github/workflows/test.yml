@@ -33,6 +33,4 @@ jobs:
         run: |
           docker ps -a
           docker-compose up -d
-          docker exec -it d-anime-mylist-backend_web_1 bash
-          cd ../test
-          ./test.sh
+          docker exec -T d-anime-mylist-backend_web_1 bash cd ../test & ./test.sh
