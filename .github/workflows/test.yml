@@ -33,4 +33,4 @@ jobs:
         run: |
           docker-compose up -d
           docker ps -a
-          docker-compose exec -T web sh -c "cd ../test & ./test.sh"
+          docker-compose exec -T web sh -c "ls -a & cd ../test & ls -a & ./test.sh"
