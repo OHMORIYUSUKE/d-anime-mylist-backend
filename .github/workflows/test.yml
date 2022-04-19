@@ -31,5 +31,8 @@ jobs:
           DB_NAME: d-anime-mylist
           TZ: Asia/Tokyo
         run: |
+          docker ps -a
           docker-compose up -d
-          docker-compose exec -T web bash cd ../test & ./test.sh
+          docker exec -it d-anime-mylist-backend_web_1 bash
+          cd ../test
+          ./test.sh
