@@ -35,4 +35,4 @@ jobs:
           pwd
           docker-compose up -d
           docker ps -a
-          docker-compose exec -T web bash -c "cd ../test && chmod 777 test.sh && ./test.sh"
+          docker-compose exec -T web bash -c "cd ../.. && chmod -R 777 app/ && cd app/test && chmod 777 test.sh && ./test.sh"
