@@ -7,9 +7,9 @@ from utils.const_values import DANIME_MYLISTPAGE_BASE_URL
 from utils.get_id_in_url import get_id_in_url
 from utils.scrape import Scrape
 
-from cruds.crudsMylist import CrudsMylist
-from cruds.crudsMylistContents import CrudsMylistContents
-from cruds.crudsAnimeInfo import CrudsAnimeInfo
+from cruds.CrudsMylist import CrudsMylist
+from cruds.CrudsMylistContents import CrudsMylistContents
+from cruds.CrudsAnimeInfo import CrudsAnimeInfo
 
 
 class Service:

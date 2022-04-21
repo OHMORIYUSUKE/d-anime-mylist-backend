@@ -15,7 +15,7 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/chrom
 
 # コンテナ内で必要なパッケージをインストール
 WORKDIR /app
-COPY /app/requirements.txt .
+COPY /app .
 RUN pip install -r requirements.txt
 
 # __pycache__

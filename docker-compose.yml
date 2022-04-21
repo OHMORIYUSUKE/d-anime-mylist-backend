@@ -3,6 +3,7 @@ version: "3.0"
 services:
   web:
     build: ./server
+    container_name: d-anime-mylist-backend-web
     hostname: web-server
     restart: always
     tty: true
@@ -54,7 +55,7 @@ services:
     hostname: phpmyadmin-server
     environment:
       PMA_ARBITRARY: 1
-      PMA_HOST: "${DB_HOST}"
+      PMA_HOST: db
       PMA_USER: "${DB_USER_NAME}"
       PMA_PASSWORD: "${DB_USER_PW}"
     restart: always
