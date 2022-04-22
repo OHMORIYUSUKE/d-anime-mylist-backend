@@ -31,12 +31,7 @@ jobs:
           DB_NAME: d-anime-mylist
           TZ: Asia/Tokyo
         run: |
-          ls -a
-          pwd
-          cd ..
-          ls -a 
           chmod -R 777 d-anime-mylist-backend/
           cd d-anime-mylist-backend/
           docker-compose up -d
-          docker ps -a
           docker-compose exec -T web bash -c "cd ../.. && chmod -R 777 app/ && cd app/test && chmod 777 test.sh && ./test.sh"

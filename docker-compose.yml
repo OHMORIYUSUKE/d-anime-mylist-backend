@@ -25,6 +25,7 @@ services:
 
   nginx:
     image: nginx:alpine
+    container_name: d-anime-mylist-backend-nginx
     hostname: nginx-server
     depends_on:
       - web
@@ -37,6 +38,7 @@ services:
 
   db:
     build: ./db
+    container_name: d-anime-mylist-backend-db
     hostname: db-server
     volumes:
       - ./db/save_data:/var/lib/mysql
@@ -52,6 +54,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: d-anime-mylist-backend-phpmyadmin
     hostname: phpmyadmin-server
     environment:
       PMA_ARBITRARY: 1

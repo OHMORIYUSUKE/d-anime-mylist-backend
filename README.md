@@ -24,7 +24,7 @@ $ cp .env.sample .env
 #### フォーマット
 
 ```
-$ docker exec -it d-anime-mylist-web-1 bash
+$ docker exec -it d-anime-mylist-backend-web bash
 コンテナ内 # black .
 All done! ✨ 🍰 ✨
 ```
@@ -58,7 +58,7 @@ All done! ✨ 🍰 ✨
 #### データベースの作り方
 
 ```
-$ docker exec -it d-anime-mylist-web-1 bash
+$ docker exec -it d-anime-mylist-backend-web bash
 コンテナ内 # python migrate.py
 2022-03-22 09:10:13,777 INFO sqlalchemy.engine.Engine COMMIT
 Create Table! ✨ 🍰 ✨
@@ -69,7 +69,7 @@ Create Table! ✨ 🍰 ✨
 テストの実行の方法
 
 ```
-$ docker exec -it d-anime-mylist-web-1 bash
+$ docker exec -it d-anime-mylist-backend-web bash
 root@web-server:/app/api# cd ../test
 root@web-server:/app/test# ./test.sh
 ```
